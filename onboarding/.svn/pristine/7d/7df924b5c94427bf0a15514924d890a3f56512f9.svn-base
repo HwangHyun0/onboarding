@@ -1,0 +1,25 @@
+package onboarding.jeon.login;
+
+import java.util.List;
+
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import onboarding.jeon.model.JeonVo;
+import onboarding.jeon.user.UserVo;
+
+@Mapper
+public interface LoginMapper {
+	
+	public List<JeonVo> selectBoardList();
+	
+    // 로그인 인터페이스
+    public LoginVo login(LoginVo vo);
+	
+	// 로그인시 마지막 로그인날짜 변경 인터페이스
+	public int updateLastLoginDT(LoginVo vo);
+	
+	// 회원가입 인터페이스
+	public int joinUser(UserVo vo);
+	
+	// 아이디 중복체크 인터페이스
+	public int chkJoinUser(String user_id);
+}

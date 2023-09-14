@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="onboarding.jeon.board.BoardMapper">
+    
+     <!--   
+     * @id   : getBoardList
+     * @Type : select
+     * @description : 게시판 리스트 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.17  전형상    최초 생성
+     * @param  BoardVo
+     * @result BoardVo
+    <select id="getBoardList" resultType="onboarding.jeon.board.BoardVo" parameterType="onboarding.jeon.board.BoardVo">
+    -->
+    <select id="getBoardList" resultType="onboarding.jeon.board.BoardVo" parameterType="onboarding.jeon.page.PageVo">
+        /* BoardMapper.getBoardList - 게시판 리스트 호출 */
+        <![CDATA[
+            select T1.BOARD_IDX
+                 , T1.BOARD_WRT_ID
+                 , T1.BOARD_WRT_NM
+                 , T1.BOARD_UPD_ID
+                 , T1.BOARD_UPD_NM
+                 , T1.BOARD_TITLE
+                 , T1.BOARD_CONTENT
+                 , T1.BOARD_COUNT
+                 , T1.CREATE_DT
+                 , T1.UPDATE_DT
+              from jeon_board T1
+             where 1=1
+             order by T1.CREATE_DT desc
+                    , T1.BOARD_TITLE
+             limit #{start_num}, #{list_count}
+             ]]>
+    </select>
+    
+     <!--   
+     * @id   : getBoardTotalList
+     * @Type : select
+     * @description : 게시판 리스트 총 개수 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.28  전형상    최초 생성
+     * @param  BoardVo
+     * @result BoardVo
+    -->
+    <select id="getBoardTotalList" resultType="int" parameterType="onboarding.jeon.board.BoardVo">
+        /* BoardMapper.getBoardTotalList - 게시판 리스트 총 개수 호출 */
+        <![CDATA[
+            select count(BOARD_IDX)
+              from jeon_board
+             where 1=1
+             order by CREATE_DT desc
+                    , BOARD_TITLE
+        ]]>
+    </select>
+    
+    <!--   
+     * @id   : regBoard
+     * @Type : insert
+     * @description : 게시판 저장
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.28  전형상    최초 생성
+     * @param  BoardVo
+     * @result int
+    -->
+    <insert id="regBoard" parameterType="onboarding.jeon.board.BoardVo">
+        /* BoardMapper.regBoard - 게시판 저장 */
+        <![CDATA[
+            INSERT INTO jeon_board (
+                 BOARD_WRT_ID
+               , BOARD_WRT_NM
+               , BOARD_TITLE
+               , BOARD_CONTENT
+               , CREATE_DT
+            )
+            VALUES (
+                  #{board_wrt_id}
+                , #{board_wrt_nm}
+                , #{board_title}
+                , #{board_content}
+                , now()
+            )
+        ]]>
+    </insert>
+    
+    <!--   
+     * @id   : updBoardListCnt
+     * @Type : update
+     * @description : 게시물 조회수 증가
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.28  전형상    최초 생성
+     * @param  BoardVo
+     * @result int
+    -->
+    <update id="updBoardListCnt" parameterType="onboarding.jeon.board.BoardVo">
+        /* BoardMapper.updBoardListCnt - 게시판 수정 */
+        <![CDATA[
+            UPDATE jeon_board 
+               SET BOARD_COUNT = (
+                       SELECT T1.BOARD_COUNT_P
+                         FROM (
+                                SELECT ifnull(MAX(BOARD_COUNT),0) + 1 as BOARD_COUNT_P
+                                  FROM jeon_board
+                                 WHERE BOARD_IDX = #{board_idx}
+                               ) T1 
+                   )
+            WHERE BOARD_IDX = #{board_idx}
+        ]]>
+    </update>
+    
+    <!--   
+     * @id   : getBoardDetailList
+     * @Type : select
+     * @description : 게시판 상세보기 리스트 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.28  전형상    최초 생성
+     * @param  BoardVo
+     * @result BoardVo
+    -->
+    <select id="getBoardDetailList" resultType="onboarding.jeon.board.BoardVo" parameterType="onboarding.jeon.board.BoardVo">
+        /* BoardMapper.getBoardDetailList - 게시판 상세보기 리스트 호출 */
+        <![CDATA[
+            select T1.BOARD_IDX
+                 , T1.BOARD_WRT_ID
+                 , T1.BOARD_WRT_NM
+                 , T1.BOARD_UPD_ID
+                 , T1.BOARD_UPD_NM
+                 , T1.BOARD_TITLE
+                 , T1.BOARD_CONTENT
+                 , T1.BOARD_COUNT
+                 , T1.CREATE_DT
+                 , T1.UPDATE_DT
+              from jeon_board T1
+              left join jeon_board_file T2
+                on T1.BOARD_IDX = T2.BOARD_IDX
+             where T1.BOARD_IDX = #{board_idx}
+             order by T1.CREATE_DT desc
+                    , T1.BOARD_TITLE
+             ]]>
+    </select>
+    
+    <!--   
+     * @id   : updBoard
+     * @Type : update
+     * @description : 게시판 수정
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.28  전형상    최초 생성
+     * @param  BoardVo
+     * @result int
+    -->
+    <update id="updBoard" parameterType="onboarding.jeon.board.BoardVo">
+        /* BoardMapper.updBoard - 게시판 수정 */
+        <![CDATA[
+            UPDATE jeon_board 
+               SET BOARD_TITLE   = #{board_title}
+                 , BOARD_CONTENT = #{board_content}
+                 , BOARD_UPD_ID  = #{board_upd_id}
+                 , BOARD_UPD_NM  = #{board_upd_nm}
+                 , UPDATE_DT     = now()
+             WHERE BOARD_IDX = #{board_idx}
+        ]]>
+    </update>
+    
+    <!--   
+     * @id   : delBoard
+     * @Type : delete
+     * @description : 게시판 삭제
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.06.10  전형상    최초 생성
+     * @param  BoardVo
+     * @result int
+    -->
+    <delete id="delBoard" parameterType="Int">
+        /* BoardMapper.delBoard - 게시판 삭제 */
+        <![CDATA[
+            DELETE FROM jeon_board
+             WHERE BOARD_IDX = #{board_idx}
+        ]]>
+    </delete>
+</mapper>

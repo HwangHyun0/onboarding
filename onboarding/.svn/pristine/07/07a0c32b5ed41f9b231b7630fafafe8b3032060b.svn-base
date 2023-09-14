@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+
+
+.bluebtn {background-color:#3068a7; color:white;}
+.redbtn {background-color:#3068a7; color:white;}

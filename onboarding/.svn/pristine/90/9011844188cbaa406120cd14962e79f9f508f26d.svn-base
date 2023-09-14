@@ -1,0 +1,246 @@
+package onboarding.jeon.board;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import onboarding.jeon.common.CommonUtil;
+import onboarding.jeon.page.PageVo;
+
+@CrossOrigin(origins = "*")
+@Controller
+@RequestMapping(value = "/jeon/board")
+public class BoardCtrl {
+    
+    // @Autowired
+    @Resource(name="boardSvc")
+    private BoardSvc boardSvc;
+    
+    @Resource(name="commonUtil")
+    private CommonUtil commonUtil;
+    
+    // 로거
+    static final Log logger = LogFactory.getLog(BoardCtrl.class);
+    
+    public static final String boardList       = "boardList";
+    public static final String saveCurrentPage = "current_page";
+        
+    /**
+     * @methodName  : recBoardPage
+     * @description : 게시판 기본페이지 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초 생성
+     *
+     * @param request
+     * @param session
+     * @return
+     * @throws Exception
+    */
+    @RequestMapping(value = "/boardPage.dcp", method = RequestMethod.GET)
+    public ModelAndView recBoardPage(HttpServletRequest req, PageVo pageVo) throws Exception {
+        logger.info("============== Http Req : boardPage.dcp ================");
+        String url = "/WEB-INF/classes/onboarding/jeon/view/board/BoardMain.jeonMain";
+        ModelAndView mv = commonUtil.chkRedirectUrl(req, url);
+        String viewName = mv.getViewName();
+        
+        if(!(viewName.contains("loginPage.dcp"))) {
+            if(pageVo.getCurrent_page() == 0) {
+                mv.addObject(saveCurrentPage , 1);
+            } else {
+                mv.addObject(saveCurrentPage , pageVo.getCurrent_page());
+            }
+            mv.addObject("list_count"  , 5);
+        }
+        
+        return mv;
+    }
+    
+    /**
+     * @methodName  : getBoardList
+     * @description : 게시판 리스트 가져오기
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.17  전형상    최초생성
+     *
+     * @param request
+     * @return
+     * @throws Exception
+    */
+    @ResponseBody
+    @RequestMapping(value="/getBoardList.do", method = RequestMethod.POST)
+    public List<Object> getBoardList(HttpServletRequest req, PageVo paramVo) throws Exception{
+    // public List<Object> getBoardList(HttpServletRequest req, PageVo paramVo, BoardVo dt) throws Exception{
+        logger.info("============== Http Req : getBoardList.do ================");
+        BoardVo vo = new BoardVo();
+        List<Object> returnList = new ArrayList<Object>();
+        /*
+         * 준비중
+        System.out.println("=============== Board Ctr");
+        System.out.println(dt.getSearchTitle());
+        System.out.println(paramVo.getCurrent_page());
+        */
+        
+        int getBoardTotalList  = boardSvc.getBoardTotalList(vo);
+        PageVo pageVo          = new PageVo(getBoardTotalList, paramVo.getCurrent_page(), paramVo.getList_count());
+        List<BoardVo> resultVo = boardSvc.getBoardList(pageVo);
+        
+        if(resultVo != null) {
+            returnList.add(0, resultVo);
+            returnList.add(1, pageVo);
+        }else {
+            returnList.add(0, "조회된 데이터가 없습니다.");
+        }
+        return returnList;
+    }
+    
+    /**
+     * @methodName  : regBoardPage
+     * @description : 게시판 작성 페이지 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초 생성
+     *
+     * @param request
+     * @param session
+     * @return
+     * @throws Exception
+    */
+    @RequestMapping(value = "/regBoardPage.dcp", method = RequestMethod.GET)
+    public ModelAndView regBoardPage(HttpServletRequest req) throws Exception {
+        logger.info("============== Http Req : regBoardPage.dcp ================");
+        String url = "/WEB-INF/classes/onboarding/jeon/view/board/BoardReg.jeonMain";
+        ModelAndView mv = commonUtil.chkRedirectUrl(req, url);
+        return mv;
+    }
+
+    /**
+     * @methodName  : regBoard
+     * @description : 게시판 저장
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.27  전형상    최초생성
+     *
+     * @param request
+     * @param PageVo
+     * @return 
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value="/regBoard.do", method = RequestMethod.POST)
+    public Map<String, Object> regBoard(HttpServletRequest req, BoardVo vo) throws Exception{
+        logger.info("============== Http Req : regBoard.do ================");
+        Map<String, Object> resultMap = boardSvc.regBoard(vo);
+        return resultMap;
+    }
+    
+    
+    /**
+     * @methodName  : boardDetailPage
+     * @description : 게시판 상세 페이지 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.28  전형상    최초 생성
+     *
+     * @param request
+     * @param PageVo
+     * @return
+     * @throws Exception
+    */
+    @RequestMapping(value = "/boardDetailPage.dcp", method = RequestMethod.GET)
+    public ModelAndView boardDetailPage(HttpServletRequest req, BoardVo vo, PageVo pageVo) throws Exception {
+        logger.info("============== Http Req : boardDetailPage.dcp ================");
+        String url = "/WEB-INF/classes/onboarding/jeon/view/board/BoardDetail.jeonMain";
+        ModelAndView mv = commonUtil.chkRedirectUrl(req, url);
+        
+        List<BoardVo> getBoardListDetail = boardSvc.getBoardDetailList(vo);
+        mv.addObject(boardList, getBoardListDetail);
+        if(pageVo.getCurrent_page() == 0) {
+            mv.addObject(saveCurrentPage , 1);
+        } else {
+            mv.addObject(saveCurrentPage , pageVo.getCurrent_page());
+        }
+        return mv;
+    }
+    
+    /**
+     * @methodName  : updBoard
+     * @description : 게시판 수정
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.28  전형상    최초생성
+     *
+     * @param  request
+     * @param  BoardVo
+     * @return Map
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value="/updBoard.do", method = RequestMethod.POST)
+    public Map<String, Object> updBoard(HttpServletRequest req, BoardVo vo) throws Exception{
+        logger.info("============== Http Req : updBoard.do ================");
+        Map<String, Object> resultMap = boardSvc.updBoard(req, vo);
+        
+        return resultMap;
+    }
+    
+    /**
+     * @methodName  : delBoardList
+     * @description : 게시판 삭제 (관리자 권한)
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.06.10  전형상    최초생성
+     *
+     * @param  request
+     * @param  BoardVo
+     * @return Map
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value="/delBoardList.do", method = RequestMethod.POST)
+    public Map<String, Object> delBoardList(HttpServletRequest req, BoardVo vo) throws Exception{
+        logger.info("============== Http Req : delBoardList.do ================");
+        Map<String, Object> resultMap = boardSvc.delBoardList(vo);
+        return resultMap;
+    }
+    
+    /**
+     * @methodName  : delBoard
+     * @description : 게시판 삭제
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.06.11  전형상    최초생성
+     *
+     * @param  request
+     * @param  PageVo
+     * @return BoardVo
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value="/delBoard.do", method = RequestMethod.POST)
+    public Map<String, Object> delBoard(HttpServletRequest req, BoardVo vo) throws Exception{
+        logger.info("============== Http Req : delBoard.do ================");
+        Map<String, Object> resultMap = boardSvc.delBoard(vo);
+        return resultMap;
+    }
+}

@@ -1,0 +1,92 @@
+	<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	<%@page import="onboarding.hwang.login.model.HwangSessionVo"%>
+	<!-- swal -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+	<!-- basic -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- site metas -->
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!-- bootstrap css -->
+	<link rel="stylesheet" href="/res/css/hwang-css/bootstrap/bootstrap.min.css">
+	<!-- style css -->
+	<link rel="stylesheet" href="/res/css/hwang-css/bootstrap/style.css">
+	<!-- responsive-->
+	<link rel="stylesheet" href="/res/css/hwang-css/bootstrap/responsive.css">
+	<!-- awesome fontfamily -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<div class="loader_bg">
+	    <div class="loader"><img src="/res/img/hwang/loading.gif" alt="" /></div>
+	</div>
+	
+	<div id="mySidepanel" class="sidepanel">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+		<a  <c:if test="${ userinfo.getMenu() eq null  || userinfo.getMenu() eq '' }"> class="active"</c:if> href="/hwang/main.dcp">Home</a>
+		<a <c:if test="${ userinfo.getMenu() eq 'board' }"> class="active"</c:if> href="/hwang/user/boardList.dcp">Board</a>
+	</div>
+	
+	<!-- header -->
+	<header>
+	   <!-- header inner -->
+		<div class="head-top">
+		   <div class="container-fluid">
+		      <div class="row">
+		         <div class="col-sm-3">
+		            <div class="logo">
+		               <a href="/hwang/main.dcp"><img src="http://dcircus.com/res/img/logo.png" /></a>
+		            </div>
+		         </div>
+		         <div class="col-sm-9">
+		            <ul class="email text_align_right">
+		               	<c:choose>
+		               		<c:when test="${empty sessionScope.userinfo}">
+				               <li class="d_none"> <a  href="/hwang/user/loginView.dcp">Login</a></li>
+				               <li class="d_none" style="padding-left:0px !important;"> <a id="join" href="/hwang/user/join.dcp"> Join us </a> </li>
+		               		</c:when>
+		               		<c:otherwise>
+				               <li class="d_none" style="padding-left:0px !important;"> ${sessionScope.userinfo.user_name} 님 안녕하세요. </li>
+				               <li class="d_none" style="padding-left:0px !important;"> <a id="logOut" href="/hwang/main.dcp">Logout</a> </li>
+		               		</c:otherwise>
+		               	</c:choose>
+		         	   <li> <button class="openbtn" onclick="openNav()"><img src="/res/img/hwang/menu_btn.png"></button></li>
+	                </ul>
+	             </div>
+	          </div>
+	       </div>
+	    </div>
+	</header>
+    
+    
+   <script type="text/javascript">
+	$(document).ready(function(){
+		
+	   $("#join").click( function(){
+		   location.href = "/hwang/user/join.dcp";
+	   });
+	   
+	   
+	   $("#logOut").click( function(){
+	    	$.ajax({
+	    		type:"POST",
+	    		url : "/hwang/user/logOutAction.dcp",
+	    		async : true,
+	    		dataType :"json",
+	    		data: {	
+   				},
+	    		success : function(result){
+	    			alert("로그아웃 되었습니다. 메인 페이지로 이동합니다.");
+	    			location.href = "/hwang/main.dcp";
+	    		},
+	    		error: function(request, status, error){
+	    			alert("오류!");
+	    		}
+	    	})
+	   });
+	   
+	});
+	
+  </script>
+     

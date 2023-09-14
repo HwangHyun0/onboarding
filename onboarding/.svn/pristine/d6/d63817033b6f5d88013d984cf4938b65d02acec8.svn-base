@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="onboarding.jeon.login.LoginMapper">
+    
+     <!--   
+     * @id   : login
+     * @Type : select
+     * @description : 로그인 요청
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.16  전형상    최초 생성
+     * @param  UserVo
+     * @result UserVo
+    
+    일단 유저 관리에서 사용할 예정이라 주석제거하지 않음
+    
+    <select id="login" resultType="onboarding.jeon.user.UserVo" parameterType="onboarding.jeon.user.UserVo">
+        /* LoginMapper.login - 로그인 테스트 */
+        <![CDATA[
+            select T1.USER_ID
+                 , T1.USER_PW
+                 , T1.USER_NM
+                 , CONVERT(AES_DECRYPT(UNHEX(T1.USER_PHONE_NUM), SHA2('jhs_aes_key',256)) USING UTF8) as USER_PHONE_NUM
+                 , T1.USER_EMAIL
+                 , T1.USER_ADDRESS
+                 , T1.GRP_CD
+                 , case when T2.USE_YN != 'Y' then NULL else T1.PERM_CD end PERM_CD
+                 , T1.JOIN_DT
+                 , T1.UPDATE_DT
+                 , T1.LAST_LOGIN_DT
+                 , T1.PROFILE_PATH
+              from jeon_user T1
+              left join jeon_perm T2
+                on T1.PERM_CD = T2.PERM_CD
+             where T1.USER_ID = #{user_id}
+               and T1.USER_PW = sha2(#{user_pw}, 512)
+         ]]>
+    </select>
+    -->
+    
+    <!--   
+     * @id   : login
+     * @Type : select
+     * @description : 로그인 요청
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.16  전형상    최초 생성
+     * @param  LoginVo
+     * @result LoginVo
+    -->
+    <select id="login" resultType="onboarding.jeon.login.LoginVo" parameterType="onboarding.jeon.login.LoginVo">
+        /* LoginMapper.login - 로그인 테스트 */
+        <![CDATA[
+            select T1.USER_ID
+                 , T1.USER_NM
+                 , T1.GRP_CD
+                 , T1.FAILED_CNT
+                 , T1.FAILED_TOTAL_CNT
+                 , T1.FAILED_FLAG
+                 , T1.LAST_FAILED_LOGIN_DT
+                 , case when T2.USE_YN != 'Y' then NULL else T1.PERM_CD end PERM_CD
+                 , T2.PERM_LV
+              from jeon_user T1
+              left join jeon_perm T2
+                on T1.PERM_CD = T2.PERM_CD
+             where T1.USER_ID = #{user_id}
+               and T1.USER_PW = sha2(#{user_pw}, 512)
+         ]]>
+    </select>
+    
+    <!--   
+     * @id   : updateLastLoginDT
+     * @Type : update
+     * @description : 로그인 성공시 마지막 로그인 일시 현재 시간으로 수정
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.16  전형상    최초 생성
+     * @param  LoginVos
+     * @result int
+    -->
+    <update id="updateLastLoginDT" parameterType="onboarding.jeon.login.LoginVo">
+       /* LoginMapper.updateLastLoginDT - 마지막 로그인 일시 현재로 수정 */
+       <![CDATA[
+           update jeon_user 
+              set LAST_LOGIN_DT = now()
+            where USER_ID = #{user_id}
+       ]]>
+    </update>
+    
+    <!--   
+     * @id   : chkJoinUser
+     * @Type : select
+     * @description : 회원가입시 아이디 중복체크
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.17  전형상    최초 생성
+     * @param  string
+     * @result int
+    -->
+    <select id="chkJoinUser" resultType="int" parameterType="String">
+        /* LoginMapper.chkJoinUser - 아이디 중복 체크 */
+        <![CDATA[
+            select count(USER_ID)
+              from jeon_user
+             where USER_ID = #{user_id}
+        ]]>
+    </select>
+    
+    <!--   
+     * @id   : joinUser
+     * @Type : insert
+     * @description : 회원가입 요청
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ##########  ######    ####################
+     * @ 2023.05.17  전형상    최초 생성
+     * @param  UserVo
+     * @result int
+    -->
+    <insert id="joinUser" parameterType="onboarding.jeon.user.UserVo">
+        /* LoginMapper.joinUser - 회원가입 요청 */
+        <![CDATA[
+            INSERT INTO jeon_user (
+                  USER_ID
+                , USER_PW
+                , USER_NM
+                , USER_PHONE_NUM
+                , USER_EMAIL
+                , USER_ADDRESS
+                , GRP_CD
+                , PERM_CD
+                , JOIN_DT
+                , UPDATE_DT
+                , LAST_LOGIN_DT
+                , PROFILE_PATH
+            )
+            VALUES (
+                  #{user_id}
+                , sha2(#{user_pw}, 512)
+                , #{user_nm}
+                , HEX(AES_ENCRYPT(#{user_phone_num}, SHA2('jhs_aes_key', 256)))
+                , #{user_email}
+                , #{user_address}
+                , 'Test_group'
+                , 'BB001'
+                , now()
+                , null
+                , null
+                , null
+             )
+        ]]>
+    </insert>
+    
+</mapper>

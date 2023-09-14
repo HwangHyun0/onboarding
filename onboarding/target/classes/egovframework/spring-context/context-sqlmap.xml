@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- SqlMap setup for iBATIS Database Layer -->
+	
+ 	<bean id="dcp-dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="dataSource"/>
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="MULTI_LINE"/>
+				<property name="sqlPrefix" value="==> MappedQuery: "/>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="dcp-databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+  		<property name="properties">
+    		<props>
+      			<prop key="MySQL">mysql</prop>
+      			<prop key="Oracle">oracle</prop>
+      			<prop key="Tibero">tibero</prop>
+      			<prop key="MariaDB">mariadb</prop>
+    		</props>
+  		</property>
+	</bean>	
+	
+</beans>

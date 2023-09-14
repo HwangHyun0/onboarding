@@ -1,0 +1,19 @@
+package onboarding.jeon;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import onboarding.jeon.model.JeonVo;
+
+@Service
+public class JeonSvc {
+	
+	@Autowired
+	private JeonMapper jeonMapper;
+	
+	public List<JeonVo> selectBoardList() throws Exception 
+	{
+		return jeonMapper.selectBoardList();
+	}
+}

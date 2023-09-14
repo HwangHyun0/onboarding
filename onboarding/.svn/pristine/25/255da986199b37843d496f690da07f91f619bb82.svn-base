@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+/* 
+bootstrap mb-2 얘 대체자로 만들었는데.....
+*/
+.marginTopBottom-5p {
+    margin: 5px auto;
+}
+
+.font-red {
+    color: red;
+}
+
+.text-center {
+    text-align: center !important;
+}

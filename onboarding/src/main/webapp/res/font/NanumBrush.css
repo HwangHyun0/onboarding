@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Nanum Brush';
+  font-weight: 400;
+  src: url(NanumBrush/NanumBrush.eot);
+  src: url(NanumBrush/NanumBrush.woff) format('woff'),
+       url(NanumBrush/NanumBrush.ttf) format('truetype');
+}
+
+

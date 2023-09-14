@@ -1,0 +1,88 @@
+package onboarding.jeon.common;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
+
+import onboarding.jeon.session.SessionVo;
+
+@Component("commonUtil")
+public class CommonUtil {
+    
+    /**
+     * @methodName  : removeXSS
+     * @description : 크로스 사이트 스크립트 방지
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초생성
+     *
+     * @param str
+     * @return String
+     */
+    public String removeXSS(String str) {
+        String returnStr = "";
+        
+        str = str.replaceAll("&"      , "&amp;");
+        str = str.replaceAll("<"      , "&lt;");
+        str = str.replaceAll(">"      , "&gt;");
+        str = str.replaceAll("%00"    , null);
+        str = str.replaceAll("\""     , "&#34;");
+        str = str.replaceAll("\'"     , "&#39;");
+        str = str.replaceAll("%"      , "&#37;");    
+        str = str.replaceAll("../"    , "");
+        str = str.replaceAll("..\\\\" , "");
+        str = str.replaceAll("./"     , "");
+        str = str.replaceAll("%2F"    , "");    
+        str = str.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
+        str = str.replaceAll("script", "");
+        str = str.replaceAll("\r\n", "<br>");
+
+        returnStr = str;
+        return returnStr;
+    }
+    
+    /**
+     * @methodName  : chkStrNull
+     * @description : String 타입 null 체크
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초생성
+     *
+     * @param str
+     * @return boolean
+     */
+    public boolean chkStrNull(String str) {
+        return (str == null || str.trim().isEmpty() || "".equals(str));
+    }
+    
+    
+    /**
+     * @methodName  : chkRedirectUrl
+     * @description : 저장된 세션이 없을경우 로그인 페이지로 이동
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.28  전형상    최초생성
+     *
+     * @param HttpServletRequest
+     * @param String
+     * @return String
+    */
+    public ModelAndView chkRedirectUrl(HttpServletRequest req, String url) {
+        ModelAndView mv = new ModelAndView();
+        HttpSession session = req.getSession();
+        
+        SessionVo vo = (SessionVo) session.getAttribute("SaveSession");
+        if(vo == null){
+            mv.setViewName("redirect:/jeon/login/loginPage.dcp");
+        } else {
+            mv.setViewName(url);
+        }
+        
+        return mv;
+    }
+}

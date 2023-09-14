@@ -1,0 +1,5 @@
+package onboarding.jeon.model;
+
+public class JeonVo {
+	
+}

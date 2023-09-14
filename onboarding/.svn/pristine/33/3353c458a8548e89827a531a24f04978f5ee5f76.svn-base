@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/jsp/common/include.jsp"%>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>JHS Board - Login</title>    
+    
+    <link rel="stylesheet" type="text/css" href="/res/css/jeon-css/bootstrap/bootstrap.min.css"  />
+    <link rel="stylesheet" type="text/css" href="/res/css/jeon-css/common/common.css"  />
+    <script type="text/javascript" src="/res/js/jeon-js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/res/js/jeon-js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/res/js/jeon-js/common/common.js"></script>
+    <script type="text/javascript" src="/res/js/jquery-1.8.3.js"></script>
+    <style>
+    </style>
+</head>
+
+<body class="bg-gradient-primary">
+    <div class="container">
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12 col-md-12" style="width:500px">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Join User</h1>
+                                    </div>
+                                    <form id="joinForm" class="user">
+                                        <div class="form-group">
+                                            <div class="row mb-2">
+                                                <label for="user_id" class="col-sm-3 col-form-label"><em class="font-red">*</em> ID</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" id="user_id" name="user_id" class="form-control" placeholder="ID" />                                                 
+                                                </div>
+                                            </div>
+                                            <input type="password" id="user_pw"      name="user_pw"      class="form-control form-control-user marginTopBottom-5p" placeholder="Password" autocomplete="off">
+                                            <input type="password" id="user_PwAgain" name="user_PwAgain" class="form-control form-control-user marginTopBottom-5p" placeholder="Please enter your password again" autocomplete="off">
+                                        </div>
+                                        <div class="row form-group mb-2">
+                                            <label for="user_nm" class="col-sm-3 col-form-label"><em class="font-red">*</em> 이름</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="user_nm" name="user_nm" class="form-control" placeholder="이름을 입력해주세요">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group mb-2">
+                                            <label for="user_email" class="col-sm-3 col-form-label">Email</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="user_email" name="user_email" class="form-control" placeholder="이메일을 입력해주세요">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group mb-2">
+                                            <label for="user_phone_num" class="col-sm-3 col-form-label">전화번호</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="user_phone_num" name="user_phone_num" class="form-control" placeholder="01057510988">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group mb-2">
+                                            <label for="user_address" class="col-sm-3 col-form-label">주소</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="user_address" name="user_address" class="form-control" placeholder="경기도 남양주시 별내 파라곤스퀘어 20층">
+                                            </div>
+                                        </div>
+                                        <div class="justify-content-center">
+                                            <span id="loginLog" class="font-red form-control-user"></span>
+                                        </div>
+                                    </form>
+                                    <div>
+                                        <hr>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button id="joinBtn"   class="btn btn-outline-success"    type="button">Join the Member</button>
+                                        <button id="canselBtn" class="btn btn-outline-secondary"  type="button" onclick="location.href='/jeon/login/loginPage.dcp'">Cansel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var chkPasswrd = false;
+            
+            $("#user_id").on('keyup', function(){
+                specialReplaceStr($(this).val(), "user_id");
+            });
+            
+            $("#user_pw, #user_PwAgain").on('keyup', function(){
+                var pwdDiv   = $("#user_pw").val();
+                var pwdDivAg = $("#user_PwAgain").val();
+
+                // 나중에 정규식
+                // var regtest = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-]){8,15};
+                
+                if(pwdDiv != pwdDivAg){
+                    $("#loginLog").html("비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
+                    $("#user_pw, #user_PwAgain").addClass("border border-danger");
+                    $("#user_pw, #user_PwAgain").removeClass("border border-success");
+                    chkPasswrd = false;
+                } else {
+                    $("#loginLog").empty();
+                    $("#user_pw, #user_PwAgain").addClass("border border-success");
+                    $("#user_pw, #user_PwAgain").removeClass("border border-danger");
+                    chkPasswrd = true;
+                }
+            });
+            
+            
+            $("#joinBtn").on('click', function(){
+                $("#loginLog").empty();
+                var userId   = $("#user_id").val().trim();
+                var userPw   = $("#user_pw").val().trim();
+                var userPwAg = $("#user_PwAgain").val().trim();
+                var user_nm  = $("#user_nm").val().trim();
+                
+                if(isEmpty(userId)){
+                    $("#user_id").focus();
+                    $("#loginLog").html("아이디를 입력해주세요");
+                    return;
+                }
+                if(isEmpty(userPw)){
+                    $("#user_pw").focus();
+                    $("#loginLog").html("비밀번호를 입력해주세요");
+                    return;
+                }
+                if(isEmpty(userPwAg)){
+                    $("#user_PwAgain").focus();
+                    $("#loginLog").html("비밀번호 재확인을 입력해주세요");
+                    return;
+                }
+                if(isEmpty(user_nm)){
+                    $("#user_nm").focus();
+                    $("#loginLog").html("이름을 입력해주세요");
+                    return;
+                }
+                if(chkPasswrd){
+                    $.ajax({ 
+                          type    : "POST"
+                        , url     : "/jeon/login/joinUser.do"
+                        , data    : $("#joinForm :input[value != '']").serialize()     // 해당 폼 안에 input value 가 blank일경우 반환하지 않음
+                        , success : function (data) {
+                            // console.log(data);
+                            if ("Success"== data.errMsg ) {
+                                alert("회원가입이 완료되었습니다.");
+                                location.href = data.pageUrl;
+                            }else{
+                                $("#loginLog").html(data.errMsg);
+                            }
+                        }
+                        , error : function (data, status) {
+                            alert(status + " >> " + data.status);
+                        }
+                    });
+                }else {
+                    console.log("chkPasswrd Failed");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+

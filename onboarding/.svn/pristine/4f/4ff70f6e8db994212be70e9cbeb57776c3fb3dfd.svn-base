@@ -1,0 +1,135 @@
+package onboarding.jeon.login;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import onboarding.jeon.common.CommonUtil;
+import onboarding.jeon.user.UserVo;
+
+@Controller
+@RequestMapping(value = "/jeon/login")
+public class LoginCtrl {
+    
+    // 충돌 방지를 위해 경로 직접 적용
+    // @Autowired
+    @Resource(name="loginSvc")
+    private LoginSvc loginSvc;
+    
+    @Resource(name="commonUtil")
+    private CommonUtil commonUtil;
+    
+    // 로거
+    static final Log logger = LogFactory.getLog(LoginCtrl.class);
+    
+    @Value("${jeon.JspPath}")
+    private String contextPath;
+    
+    /**
+     * @methodName  : recLogin
+     * @description : 로그인 기본페이지 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.12  전형상    최초 생성
+     *
+     * @param request
+     * @param session
+     * @return
+     * @throws Exception
+    */
+    @RequestMapping(value = "/loginPage.dcp", method = RequestMethod.GET)
+    public ModelAndView recLogin(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        logger.info("============== Http Req : loginPage.dcp ================");
+        ModelAndView mv = new ModelAndView("/WEB-INF/classes/onboarding/jeon/view/login/Login.empty_tiles");
+        return mv;
+    }
+        
+    /**
+     * @methodName  : login
+     * @description : 로그인, 권한 세션
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.14  전형상    최초생성
+     * @ 2023.05.26  전형상    로직 수정
+     *
+     * @param request
+     * @return
+     * @throws Exception
+    */
+    @ResponseBody
+    @RequestMapping(value="/login.do", method = RequestMethod.POST)
+    public Map<String, Object> login(LoginVo vo, HttpServletRequest req, HttpSession session) throws Exception{
+        logger.info("============== Http Req : login.do ================");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        String pageUrl = "";
+        String errMsg  = "";
+        
+        if(commonUtil.chkStrNull(vo.getUser_id()) || commonUtil.chkStrNull(vo.getUser_pw())) {
+            pageUrl = "null";
+            errMsg  = "Non Parameter : Failed";
+            resultMap.put("pageUrl" , pageUrl);
+            resultMap.put("errMsg"  , errMsg);
+        } else {
+            resultMap = loginSvc.login(session, vo);
+        }
+        return resultMap;
+    }
+    
+    /**
+     * @methodName  : recJoin
+     * @description : 회원가입 기본페이지 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초 생성
+     *
+     * @param request
+     * @param session
+     * @return
+     * @throws Exception
+    */
+    @RequestMapping(value = "/joinPage.dcp", method = RequestMethod.GET)
+    public ModelAndView recJoin(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        logger.info("============== Http Req : joinPage.dcp ================");
+        
+        ModelAndView mv = new ModelAndView("/WEB-INF/classes/onboarding/jeon/view/login/Join.empty_tiles");
+        return mv;
+    }
+    
+    /**
+     * @methodName  : joinUser
+     * @description : 회원가입 요청
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초 생성
+     *
+     * @param request
+     * @param session
+     * @return
+     * @throws Exception
+    */
+    @ResponseBody
+    @RequestMapping(value = "/joinUser.do", method = RequestMethod.POST)
+    public Map<String, Object> joinUser(UserVo userVo,HttpServletRequest req, HttpServletResponse res) throws Exception {
+        logger.info("============== Http Req : joinUser.do ================");
+        
+        Map<String, Object> resultMap = loginSvc.joinUser(userVo);
+        return resultMap;
+    }
+}

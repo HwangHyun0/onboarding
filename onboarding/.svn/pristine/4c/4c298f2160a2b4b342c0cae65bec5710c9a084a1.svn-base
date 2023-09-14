@@ -1,0 +1,13 @@
+package onboarding.jeon;
+
+import java.util.List;
+
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import onboarding.jeon.model.JeonVo;
+
+@Mapper
+public interface JeonMapper {
+	
+	public List<JeonVo> selectBoardList();
+
+}

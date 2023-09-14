@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="onboarding.hwang.board.HwangBoardMapper">
+	<insert id="insertBoard" parameterType="onboarding.hwang.board.model.HwangBoardVo">
+		INSERT INTO HWANG_BOARD (
+			 USER_ID
+		   , TITLE
+		   , CONTENT
+		   , REG_DATE
+		) VALUES (
+		     #{user_id}
+		   , #{title}
+		   , #{content}
+		   , now()
+		)
+	</insert>
+
+	<select id="selectBoardList" resultType="onboarding.hwang.board.model.HwangBoardVo">
+		SELECT
+			ID
+	   	   , USER_ID
+		   , TITLE
+		   , CONTENT
+		   , REG_DATE
+		FROM
+			hwang_board
+		WHERE 1=1
+	</select>
+	
+	
+</mapper>

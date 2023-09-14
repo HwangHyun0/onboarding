@@ -1,0 +1,41 @@
+@charset "utf-8";
+html, body {height:100%; margin:0; padding:0; font-size:12px; font-family: 돋움;}
+
+.jhs-wrap{
+    width: 100%;
+}
+
+.headerTp, .contentTp, .footerTp{
+    width: 100%;
+    float: left;
+}
+
+.headerTp, .footerTp{
+    /* height: 8em; */
+    height: 8vh;
+}
+
+.sidebarTp{
+    width: 10%;
+    /* height: 600px; */
+    height: 84vh;
+    color: #4e73df;
+    background-color: #ffffff;
+    float: left;
+}
+
+.bodyContentTp{
+    width: 90%;
+    /* height: 600px; */
+    height: 84vh;
+    background-color: #EAEAEA;
+    float: left;
+}
+
+.headerTp{
+    background-color: #000000;
+}
+
+.footerTp{
+    background-color: #000000;
+}

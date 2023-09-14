@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Nanum Square';
+  font-weight: 400;
+  src: url(NanumSquare/NanumSquare.eot);
+  src: url(NanumSquare/NanumSquare.woff) format('woff'),
+       url(NanumSquare/NanumSquare.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Square';
+  font-weight: bold;
+  src: url(NanumSquare/NanumSquareBold.eot);
+  src: url(NanumSquare/NanumSquareBold.woff) format('woff'),
+       url(NanumSquare/NanumSquareBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Square';
+  font-weight: 900;
+  src: url(NanumSquare/NanumSquareExtraBold.eot);
+  src: url(NanumSquare/NanumSquareExtraBold.woff) format('woff'),
+       url(NanumSquare/NanumSquareExtraBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Square';
+  font-weight: 200;
+  src: url(NanumSquare/NanumSquareLight.eot);
+  src: url(NanumSquare/NanumSquareLight.woff) format('woff'),
+       url(NanumSquare/NanumSquareLight.ttf) format('truetype');
+}
+
+

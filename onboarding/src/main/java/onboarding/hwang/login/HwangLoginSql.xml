@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="onboarding.hwang.login.HwangLoginMapper">
+	
+	<insert id="insertJoin" parameterType="onboarding.hwang.login.model.HwangVo">
+		INSERT INTO HWANG_USERINFO (
+			 USER_ID
+		   , USER_NAME
+		   , PASSWORD
+		   , PHONE
+		   , CREATE_DT
+		   , USER_TYPE
+		) VALUES (
+		     #{user_id}
+		   , #{user_name}
+		   , #{password}
+		   , #{phone}
+		   , now()
+		   , 1
+		)
+	</insert>
+	
+	<select id="idCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*) 
+		FROM
+			HWANG_USERINFO
+		WHERE
+			USER_ID = #{value}
+	</select>
+	
+	<select id="getuserInfo" parameterType = "onboarding.hwang.login.model.HwangVo" resultType="onboarding.hwang.login.model.HwangSessionVo">
+		SELECT
+			USER_ID,
+			USER_NAME,
+			PASSWORD,
+			PHONE,
+			CURRENT_TIMESTAMP AS LOGINTIME
+		FROM
+			HWANG_USERINFO
+		WHERE 
+			USER_ID = #{user_id}
+		AND 
+			PASSWORD = #{password}
+	</select>
+	
+	<select id="selectFindID" parameterType = "onboarding.hwang.login.model.HwangVo" resultType="onboarding.hwang.login.model.HwangVo">
+		SELECT
+			USER_ID,
+			USER_NAME,
+			PASSWORD,
+			PHONE,
+			CURRENT_TIMESTAMP AS LOGINTIME
+		FROM
+			HWANG_USERINFO
+		WHERE 
+			USER_NAME = #{user_name}
+		AND 
+			PHONE = #{phone}
+	</select>
+	
+</mapper>

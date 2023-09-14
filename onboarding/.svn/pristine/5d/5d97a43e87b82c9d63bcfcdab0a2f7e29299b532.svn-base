@@ -1,0 +1,150 @@
+@charset "utf-8";
+
+html, body {height:100%; margin:0; padding:0; font-size:12px; font-family: 돋움;}
+a {text-decoration:none;}
+a:hover {color:red;}
+td, tr {outline:none;}
+h3 {margin: 10px 0px;} 
+img {border:0}
+input[type=radio] { vertical-align: middle;}
+input[type=checkbox] { vertical-align: middle;}
+
+
+#appLayout {height:100%;}
+#headArea {background-image: url(/res/img/dcp/bg_pattern.png); background-repeat: repeat;}
+#tailArea {background-image: url(/res/img/dcp/bg_pattern.png); background-repeat: repeat; text-align:center; padding:10px;}
+#leftArea {width:23em;}
+
+.dijitTreeIcon {width: 16px; height: 16px;}
+.dtsTreeDesign {background: url(/res/img/dcp/tree_icon_design.png) no-repeat;}
+
+.dtsTreeSite {background: url(/res/img/dcp/tree_icon_site.png) no-repeat;}
+.dtsTreeBoard {background: url(/res/img/dcp/tree_icon_board.png) no-repeat;}
+.dtsTreeMenu {background: url(/res/img/dcp/tree_icon_menu.png) no-repeat;}
+.dtsTreeContent {background: url(/res/img/dcp/tree_icon_content.png) no-repeat;}
+.dtsTreeDev {background: url(/res/img/dcp/tree_icon_dev.png) no-repeat;}
+.dtsTreeAdmin {background: url(/res/img/dcp/tree_icon_admin.png) no-repeat;}
+.dtsTreeTab {background: url(/res/img/dcp/tree_icon_tab.png) no-repeat;}
+.dtsTreeFolderOpen {background: url(/res/img/dcp/tree_icon_folder_open.png) no-repeat;}
+.dtsTreeFolderClose {background: url(/res/img/dcp/tree_icon_folder_close.png) no-repeat;}
+.dtsTreeUserGroupOpen {background: url(/res/img/dcp/tree_icon_group_open.png) no-repeat;}
+.dtsTreeUserGroupClose {background: url(/res/img/dcp/tree_icon_group_close.png) no-repeat;}
+.dtsTreeUserGroup {background: url(/res/img/dcp/tree_icon_account_group.png) no-repeat;}
+.dtsTreeUserMan {background: url(/res/img/dcp/tree_icon_account_member_man.png) no-repeat;}
+.dtsTreeUserWoman {background: url(/res/img/dcp/tree_icon_account_member_woman.png) no-repeat;}
+.dtsTreeCalender {background: url(/res/img/dcp/tree_icon_calender.png) no-repeat;}
+.dtsTreeLinkExternal {background: url(/res/img/dcp/tree_icon_link_external.png) no-repeat;}
+.dtsTreeLinkInternal {background: url(/res/img/dcp/tree_icon_link_internal.png) no-repeat;}
+.dtsTreeProfBoard {background: url(/res/img/dcp/tree_icon_prof_board.png) no-repeat;}
+.dtsTreeProfPds {background: url(/res/img/dcp/tree_icon_prof_pds.png) no-repeat;}
+.dtsTreeDeploy {background: url(/res/img/dcp/tree_icon_deploy.png) no-repeat;}
+.dtsTreeTypeChange {background: url(/res/img/dcp/tree_icon_type_change.png) no-repeat;}
+.dtsTreeMap {background: url(/res/img/dcp/tree_icon_map.png) no-repeat;}
+.dtsTreeEducation {background: url(/res/img/dcp/tree_icon_education.png) no-repeat;}
+.dtsTreeTotalSearch {background: url(/res/img/dcp/tree_icon_search.png) no-repeat;}
+.dtsTreeSitemap {background: url(/res/img/dcp/tree_icon_sitemap.png) no-repeat;}
+.dtsTreeFaculty {background: url(/res/img/dcp/tree_icon_faculty.png) no-repeat;}
+.dtsTreeSchedule {background: url(/res/img/dcp/tree_icon_schedule.png) no-repeat;}
+.dtsTreeYoutube {background: url(/res/img/dcp/tree_icon_youtube.png) no-repeat;}
+.dtsTreeHidden {background: url(/res/img/dcp/tree_icon_hidden.png) no-repeat;}
+
+
+.dtsMenuIcon {width:16px; height:16px;}
+.dtsMenuAdd {background: url(/res/img/dcp/menu_icon_add.png) no-repeat;}
+.dtsMenuMod {background: url(/res/img/dcp/menu_icon_mod.png) no-repeat;}
+.dtsMenuDel {background: url(/res/img/dcp/menu_icon_del.png) no-repeat;}
+.dtsMenuInfo {background: url(/res/img/dcp/menu_icon_info.png) no-repeat;}
+.dtsMenuDeploy {background: url(/res/img/dcp/menu_icon_deploy.png) no-repeat;}
+.dtsMenuDeployOne {background: url(/res/img/dcp/menu_icon_deploy_one.png) no-repeat;}
+.dtsMenuDeployAll {background: url(/res/img/dcp/menu_icon_deploy_all.png) no-repeat;}
+.dtsMenuSync {background: url(/res/img/dcp/menu_icon_sync.png) no-repeat;}
+.dtsMenuSyncUp {background: url(/res/img/dcp/menu_icon_sync_up.png) no-repeat;}
+.dtsMenuSyncDown {background: url(/res/img/dcp/menu_icon_sync_down.png) no-repeat;}
+.dtsMenuRefresh {background: url(/res/img/dcp/menu_icon_refresh.png) no-repeat;}
+.dtsMenuPreview {background: url(/res/img/dcp/menu_icon_preview.png) no-repeat;}
+.dtsMenuOrder {background: url(/res/img/dcp/menu_icon_order.png) no-repeat;}
+.dtsMenuOrderUp {background: url(/res/img/dcp/menu_icon_order_up.png) no-repeat;}
+.dtsMenuOrderDown {background: url(/res/img/dcp/menu_icon_order_down.png) no-repeat;}
+.dtsMenuDev {background: url(/res/img/dcp/dev.png) no-repeat;}
+.dtsMenuDevRed {background: url(/res/img/dcp/dev_red.png) no-repeat;}
+.dtsMenuDevYellow {background: url(/res/img/dcp/dev_yellow.png) no-repeat;}
+.dtsMenuDevGreen {background: url(/res/img/dcp/dev_green.png) no-repeat;}
+
+
+/* login */
+#loader {padding:0; margin:0; position:absolute; top:0; left:0; width:100%; height:100%; background:#ffffff; opacity: 0.98; z-index:999; vertical-align:middle;}
+#loaderInner {position: absolute; top: 50%; left: 50%; width: 32px; height: 32px; margin-top: -16px; margin-left: -16px; background-image: url(/res/img/dcp/loader.gif); background-repeat: no-repeat;}
+#loginBody .text {padding-top:10px; text-align:left; width:500px;}
+#loginBody .text li {list-style: none; margin:0 0 5px 0; background:url(/res/img/dcp/util.png) no-repeat 0 5px; padding-left:7px; color:#252525;}
+#loginBody .text span {color:#00387f;}
+#loginBody .text a {color:#ba000c;}
+
+
+/* dcp table */
+table.dcpTable {border:1px solid #cbcbcb; border-top:2px solid #48bcff; width:100%; border-collapse:collapse; border-spacing:0; word-wrap:break-word;}
+table.dcpTable .tr {border-top:2px solid #a20000; z-index: 999; }
+table.dcpTable th {padding:7px 0; border:1px solid #cbcbcb; font-weight:bold; text-align:center; vertical-align:middle; line-height:16px; background-color:#e5e7ea;}
+table.dcpTable .th {padding:7px 0; border:1px solid #cbcbcb; font-weight:bold; text-align:center; vertical-align:middle; line-height:16px; background-color:#e5e7ea;}
+table.dcpTable tr:nth-child(odd) {background: #f9f9f9;}
+table.dcpTable td {padding:7px; line-height:17px; border:1px solid #cbcbcb; text-align:center; vertical-align:middle;} 
+table.dcpTable td.al {text-align:left; padding-left:12px;}
+table.dcpTable td.ar {text-align:right;}
+table.dcpTable td label {line-height:24px; vertical-align:middle;}
+table.dcpTable td input {vertical-align:middle;}
+table.dcpTable td select {height:22px;}
+table.dcpTable td img.ui-datepicker-trigger {margin-left:5px;vertical-align:middle;}
+table.dcpTable.non-odd tr:nth-child(odd) {background: none;}
+table.dcpTable .bg {background-color:#f8e0e4 !important;}
+table.dcpTable .selectTd { background-color: #f47171; color:white;}
+
+/* paging */
+.paging a {padding-left:5px;}
+.paging a img {vertical-align: middle;}
+.paging a.on {font-weight: bold; font-size: 17px;}
+
+
+/* login */
+.back_01 { background:url("/res/img/dcp/login/login01_black.jpg") no-repeat 0 0; padding: 165px 0 180px; background-position:center 0; background-size: cover;}
+.back_02 { background:url("/res/img/dcp/login/login02_black.jpg") no-repeat 0 0; padding: 165px 0 180px; background-position:center 0; background-size: cover;}
+.back_03 { background:url("/res/img/dcp/login/login03_black.jpg") no-repeat 0 0; padding: 165px 0 180px; background-position:center 0; background-size: cover;}
+.back_04 { background:url("/res/img/dcp/login/login04_black.jpg") no-repeat 0 0; padding: 165px 0 180px; background-position:center 0; background-size: cover;}
+.back_05 { background:url("/res/img/dcp/login/login05_black.jpg") no-repeat 0 0; padding: 165px 0 180px; background-position:center 0; background-size: cover;}
+.login { max-width:454px; width: 100%; margin: 0 auto; }
+.login .head { background: url("/res/img/dcp/login/login_form_black.png") repeat; height: 95px; margin-bottom: 2px; text-align: center;}
+.login .head a {display:table-cell; padding:0 10px; height:95px; vertical-align:middle;}
+.login .body { background: url("/res/img/dcp/login/login_form_black.png") repeat; height: 550px; text-align: center; border-radius : 0 0 10px 10px;	}
+.login .body input { background: url("/res/img/dcp/login/input_black.png") repeat; border: 0; max-width: 362px; width: 97%; height: 43px; padding-left: 3%;}
+.login .pr { position: relative; padding: 0 9% 0 9%;}
+.login .w5 { width:50%; margin-right: 2px;}
+.login .margin { padding: 0 9% 0 9%; margin: 0 auto;}
+.login .margin .t12 { color: #a7a7a7; font-size: 12px;}
+.login .margin .t12 a { font-size: 12px; color: #a7a7a7;}
+.login .button { background-color: #da1b1b; height: 41px; padding-top: 15px; }
+.login .button a {font-size:20px; color: #ffffff; font-weight: bold;}
+.mt40 {margin-top: 40px !important;}
+.mt25 {margin-top: 25px !important;}
+.oh {overflow: hidden}
+
+
+/* password */
+.w_find_pw {overflow:hidden; min-height:395px; padding-bottom:25px;}
+.find_pw {position:relative; overflow:hidden; background:#e8e8e8; margin-left:31px; width:686px; min-height:240px; border:1px solid #dddddd;}
+.find_pw .find input {width:240px; height:27px; margin:0 0 5px 0; font-size:15px;}
+.find_pw .find {position:absolute; top:67px; left:208px; width:280px;}
+.find_pw .find_id {position:absolute; top:32px; left:120px;}
+.find_pw .tt {position:absolute; top:76px; left:120px;}
+.find_pw .tt li {margin-bottom:20px; }
+.find_pw .text {margin-top:160px; width:596px; background:url("/hcm/login/res/img/line.png") no-repeat 0 0; padding:20px 40px 15px 50px ;}
+.find_pw .text li {margin:0 0 5px 0; background:url("/hcm/login/res/img/util.png") no-repeat 0 5px; padding-left:7px; color:#252525;}
+.find_pw .text span {color:#00387f;}
+.find_pw .img {position:absolute; top:68px; left:458px;}
+.find_pw .code {position:absolute; top:67px; left:208px; width:335px;}
+.find_pw .code input {height:30px; margin:0 0 5px 0;}
+.find_pw .code input[type=text] {width:110px; height:30px; margin:0 0 5px 0;}
+
+
+.dijitTabListWrapper  {z-index:1;}
+.dijitTabPaneWrapper.dijitTabContainerTop-container.dijitAlignClient {z-index:1;}
+.note-modal-backdrop {display:none !important;}
+
+

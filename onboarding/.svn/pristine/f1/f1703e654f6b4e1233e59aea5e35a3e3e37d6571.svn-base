@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+  	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+  	http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+	<!-- SqlSession setup for MyBatis Database Layer -->
+	
+	<mybatis:scan base-package="onboarding" />
+	
+    <bean id="dcp-sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="dcp-dataSource" />
+		<property name="databaseIdProvider" ref="dcp-databaseIdProvider" />    
+    	<property name="mapperLocations">
+			<array>
+				<value>classpath:/onboarding/**/*Sql.xml</value>
+			</array>
+    	</property>
+   	</bean>
+	
+</beans>

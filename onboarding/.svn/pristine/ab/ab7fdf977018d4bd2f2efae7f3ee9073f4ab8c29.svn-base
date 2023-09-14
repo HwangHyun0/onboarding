@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+ 
+<tiles-definitions>
+ 
+	<definition name="layouts-sub-basic" template="/WEB-INF/jsp/layout/subLayout.jsp">
+		<put-attribute name="header"    value="/WEB-INF/jsp/main/header.jsp" />
+		<put-attribute name="leftmenu"	value=""/>
+		<put-attribute name="content"   value="" />
+		<put-attribute name="footer"    value="/WEB-INF/jsp/main/footer.jsp" />
+	</definition>
+	<definition name="**/*.sub_tiles" extends="layouts-sub-basic">
+		<put-attribute name="content"   value="/{1}/{2}.jsp" />
+	</definition>
+
+	<definition name="layouts-main" template="/WEB-INF/jsp/layout/mainLayout.jsp">
+		<put-attribute name="header"    value="/WEB-INF/jsp/main/header.jsp" />
+		<put-attribute name="content"   value="" />
+		<put-attribute name="footer"    value="/WEB-INF/jsp/main/footer.jsp" />
+	</definition>
+	<definition name="**/*.main_tiles" extends="layouts-main">
+		<put-attribute name="content"   value="/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="layouts-sub-lm" template="/WEB-INF/jsp/layout/subLayout.jsp">
+		<put-attribute name="header"    value="/WEB-INF/jsp/main/header.jsp" />
+		<put-attribute name="leftmenu"   value="/WEB-INF/jsp/main/leftmenu.jsp" />
+		<put-attribute name="content"   value="" />
+		<put-attribute name="footer"    value="/WEB-INF/jsp/main/footer.jsp" />
+	</definition>
+	<definition name="**/*.sub_lm_tiles" extends="layouts-sub-lm">
+		<put-attribute name="content"   value="/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="layouts-empty" template="/WEB-INF/jsp/layout/emptyLayout.jsp">
+	</definition>
+	<definition name="**/*.empty_tiles" extends="layouts-empty">
+		<put-attribute name="content"   value="/{1}/{2}.jsp" />
+	</definition>
+ 
+    <!-- JHS 전용 헤더 충돌 방지를 위해 추가 -->
+    <definition name="jeon-layouts-main"  template="/WEB-INF/jsp/jeon/jeon_layout/jeon_layout.jsp">
+        <put-attribute name="header"      value="/WEB-INF/jsp/jeon/jeon_layout/header.jsp" />
+        <put-attribute name="sidebar"     value="/WEB-INF/jsp/jeon/jeon_layout/sidebar.jsp" />
+        <put-attribute name="content"     value="" />
+        <put-attribute name="footer"      value="/WEB-INF/jsp/jeon/jeon_layout/footer.jsp" />
+    </definition>
+    <definition name="**/*.jeonMain"      extends="jeon-layouts-main">
+        <put-attribute name="content"     value="/{1}/{2}.jsp" />
+    </definition>
+</tiles-definitions>

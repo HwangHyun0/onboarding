@@ -1,0 +1,31 @@
+package onboarding.jeon.board;
+
+import java.util.List;
+
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import onboarding.jeon.page.PageVo;
+
+@Mapper
+public interface BoardMapper {
+	
+	// 게시판 리스트 가져오기
+	public List<BoardVo> getBoardList(PageVo vo);
+	
+	// 게시판 리스트 총 개수 가져오기
+	public int getBoardTotalList(BoardVo vo);
+	
+	// 게시판 작성
+	public int regBoard(BoardVo vo);
+	
+    // 게시물 조회수 증가
+    public int updBoardListCnt(BoardVo vo);    
+    
+    // 게시판 상세보기 리스트 가져오기
+    public List<BoardVo> getBoardDetailList(BoardVo vo);
+    
+    // 게시판 수정
+    public int updBoard(BoardVo vo);	
+    
+    // 게시판 삭제
+    public int delBoard(int board_idx);	
+}

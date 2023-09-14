@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Nanum Pen';
+  font-weight: 400;
+  src: url(NanumPen/NanumPen.eot);
+  src: url(NanumPen/NanumPen.woff) format('woff'),
+       url(NanumPen/NanumPen.ttf) format('truetype');
+}
+
+

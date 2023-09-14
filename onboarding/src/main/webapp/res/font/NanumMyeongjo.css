@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Nanum Myeongjo';
+  font-weight: 400;
+  src: url(NanumMyeongjo/NanumMyeongjo.eot);
+  src: url(NanumMyeongjo/NanumMyeongjo.woff) format('woff'),
+       url(NanumMyeongjo/NanumMyeongjo.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Myeongjo';
+  font-weight: bold;
+  src: url(NanumMyeongjo/NanumMyeongjoBold.eot);
+  src: url(NanumMyeongjo/NanumMyeongjoBold.woff) format('woff'),
+       url(NanumMyeongjo/NanumMyeongjoBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Myeongjo';
+  font-weight: 900;
+  src: url(NanumMyeongjo/NanumMyeongjoExtraBold.eot);
+  src: url(NanumMyeongjo/NanumMyeongjoExtraBold.woff) format('woff'),
+       url(NanumMyeongjo/NanumMyeongjoExtraBold.ttf) format('truetype');
+}
+
+

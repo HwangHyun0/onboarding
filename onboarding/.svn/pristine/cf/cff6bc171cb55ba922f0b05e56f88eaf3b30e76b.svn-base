@@ -1,0 +1,104 @@
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/jsp/common/include.jsp"%>
+<div class="container">
+    <h1>게시판 등록</h1>
+    <form id="boardRegForm" class="board">
+        <div class="row mb-2">
+            <label for="board_title" class="col-sm-3 col-form-label"><em class="font-red">*</em> 제목</label>
+            <div class="col-sm-9">
+                <input type="text" id="board_title" name="board_title" class="form-control" placeholder="제목">
+            </div>
+        </div>
+        <!-- 
+        <div class="row mb-2">
+            <label for="board_file_nm" class="col-sm-3 col-form-label"><em class="font-red">*</em> 파일 첨부</label>
+            <div class="col-sm-9">
+                <input type="file" id="board_file_nm" name="board_file_nm" class="form-control" multiple="multiple">
+                <div id="testDiv"></div>
+            </div>
+        </div>
+        -->
+        <div class="row mb-2">
+            <label for="board_content" class="col-sm-3 col-form-label"><em class="font-red">*</em> 내용</label>
+            <div class="col-sm-9">
+                <textarea id="board_content" name="board_content" class="form-control" cols="100" rows="10" placeholder="내용"></textarea>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="board_wrt_nm" class="col-sm-3 col-form-label"><em class="font-red">*</em> 작성자</label>
+            <div class="col-sm-9">
+                <input type="hidden" id="board_wrt_id" name="board_wrt_id" class="form-control" value=<c:out value="${sessionScope.SaveSession.user_id}"/>>
+                <input type="text"   id="board_wrt_nm" name="board_wrt_nm" class="form-control" value=<c:out value="${sessionScope.SaveSession.user_nm}"/> readonly />
+            </div>
+        </div>
+    </form>
+    <div class="justify-content-center">
+        <span id="loginLog" class="font-red form-control-user"></span>
+    </div>
+    <div class="d-md-flex justify-content-md-end">
+        <button type="button" id="reg_board_btn" class="btn btn-outline-primary"   style="float: right;">작성</button>
+        <button type="button" id="rec_main_btn"  class="btn btn-outline-secondary" style="float: right;">뒤로가기</button>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+        $('#board_file_nm').on('change', function(){
+            var htmlstr = "";
+            var test    = $(this).get(0).files;
+            // console.log("test");
+            // console.log($('#board_file_nm').val());
+            // console.log($('#board_file_nm').get(0).files.length);
+            for(var i = 0; i < test.length; i++){
+                console.log(test[i]);
+                console.log(test[i].name);
+                htmlstr += test[i].name + "<br>";
+            }
+            $("#testDiv").html(htmlstr);
+            // console.log($('#board_file_nm').get(0).files[0]);
+            // console.log($('#board_file_nm').get(0).files[1]);
+        });
+        
+        $("#reg_board_btn").on('click', function(){
+            board_title   = $("#board_title").val().trim();
+            board_content = $("#board_content").val().trim();
+            
+            if(isEmpty(board_title)){
+                $("#board_title").focus();
+                $("#loginLog").html("제목을 입력해주세요");
+                return;
+            }
+            
+            if(isEmpty(board_content)){
+                $("#board_content").focus();
+                $("#loginLog").html("내용을 입력해주세요");
+                return;
+            }
+            
+            $.ajax({ 
+                type    : "POST"
+              , url     : "/jeon/board/regBoard.do"
+              , data    : $("#boardRegForm :input[value != '']").serialize()     // 해당 폼 안에 input value 가 blank일경우 반환하지 않음
+              , success : function (data) {
+                    if ("Success"== data.errMsg ) {
+                        alert("작성이 완료되었습니다.");
+                        location.href = data.pageUrl;
+                    }else{
+                        $("#loginLog").html(data.errMsg);
+                    }
+                }
+                , error : function (data, status) {
+                    alert(status + " >> " + data.status);
+                }
+            });
+        });
+        
+        // 목록으로 돌아가기
+        $('#rec_main_btn').on('click', function(){
+        	// location.href = "/jeon/board/boardPage.dcp?current_page="+current_page;
+            window.history.back();
+        })
+    });
+</script>

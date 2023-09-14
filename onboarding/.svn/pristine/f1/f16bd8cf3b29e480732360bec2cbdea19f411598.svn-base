@@ -1,0 +1,32 @@
+@Charset "utf-8";
+
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-weight: 400;
+  src: url(NanumGothic/NanumGothic.eot);
+  src: url(NanumGothic/NanumGothic.woff) format('woff'),
+       url(NanumGothic/NanumGothic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-weight: bold;
+  src: url(NanumGothic/NanumGothicBold.eot);
+  src: url(NanumGothic/NanumGothicBold.woff) format('woff'),
+       url(NanumGothic/NanumGothicBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-weight: 900;
+  src: url(NanumGothic/NanumGothicExtraBold.eot);
+  src: url(NanumGothic/NanumGothicExtraBold.woff) format('woff'),
+       url(NanumGothic/NanumGothicExtraBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-weight: 200;
+  src: url(NanumGothic/NanumGothicLight.eot);
+  src: url(NanumGothic/NanumGothicLight.woff) format('woff'),
+       url(NanumGothic/NanumGothicLight.ttf) format('truetype');
+}
+
+

@@ -1,0 +1,128 @@
+package onboarding.jeon.login;
+
+import java.util.Date;
+
+public class LoginVo {
+    
+    private String user_id;
+    private String user_pw;
+    private String user_nm;
+    private String user_phone_num;
+    private String user_email;
+    private String user_address;
+    private String grp_cd;
+    private String perm_cd;
+    private int    failed_cnt;
+    private int    failed_total_cnt;
+    private String failed_flag;
+    private String join_dt;
+    private String update_dt;
+    private String last_login_dt;
+    private Date   last_failed_login_dt;
+    private String profile_path;
+    private String perm_lv;
+    
+    public String getUser_id() {
+        return user_id;
+    }
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+    public String getUser_pw() {
+        return user_pw;
+    }
+    public void setUser_pw(String user_pw) {
+        this.user_pw = user_pw;
+    }
+    public String getUser_nm() {
+        return user_nm;
+    }
+    public void setUser_nm(String user_nm) {
+        this.user_nm = user_nm;
+    }
+    public String getUser_phone_num() {
+        return user_phone_num;
+    }
+    public void setUser_phone_num(String user_phone_num) {
+        this.user_phone_num = user_phone_num;
+    }
+    public String getUser_email() {
+        return user_email;
+    }
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
+    }
+    public String getUser_address() {
+        return user_address;
+    }
+    public void setUser_address(String user_address) {
+        this.user_address = user_address;
+    }
+    public String getGrp_cd() {
+        return grp_cd;
+    }
+    public void setGrp_cd(String grp_cd) {
+        this.grp_cd = grp_cd;
+    }
+    public String getPerm_cd() {
+        return perm_cd;
+    }
+    public void setPerm_cd(String perm_cd) {
+        this.perm_cd = perm_cd;
+    }
+    public int getFailed_cnt() {
+        return failed_cnt;
+    }
+    public void setFailed_cnt(int failed_cnt) {
+        this.failed_cnt = failed_cnt;
+    }
+    public int getFailed_total_cnt() {
+        return failed_total_cnt;
+    }
+    public void setFailed_total_cnt(int failed_total_cnt) {
+        this.failed_total_cnt = failed_total_cnt;
+    }
+    public String getFailed_flag() {
+        return failed_flag;
+    }
+    public void setFailed_flag(String failed_flag) {
+        this.failed_flag = failed_flag;
+    }
+    public String getJoin_dt() {
+        return join_dt;
+    }
+    public void setJoin_dt(String join_dt) {
+        this.join_dt = join_dt;
+    }
+    public String getUpdate_dt() {
+        return update_dt;
+    }
+    public void setUpdate_dt(String update_dt) {
+        this.update_dt = update_dt;
+    }
+    public String getLast_login_dt() {
+        return last_login_dt;
+    }
+    public void setLast_login_dt(String last_login_dt) {
+        this.last_login_dt = last_login_dt;
+    }
+    public Date getLast_failed_login_dt() {
+        return last_failed_login_dt;
+    }
+    public void setLast_failed_login_dt(Date last_failed_login_dt) {
+        this.last_failed_login_dt = last_failed_login_dt;
+    }
+    public String getProfile_path() {
+        return profile_path;
+    }
+    public void setProfile_path(String profile_path) {
+        this.profile_path = profile_path;
+    }
+    public String getPerm_lv() {
+        return perm_lv;
+    }
+    public void setPerm_lv(String perm_lv) {
+        this.perm_lv = perm_lv;
+    }
+    
+}

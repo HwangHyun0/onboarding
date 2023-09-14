@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+#contents {margin:150px auto; min-height:500px;}
+#contents h1 {padding:15px; font-size: 18px;}
+
+.bluebtn {background-color:#3068a7; color:white;}
+.redbtn {background-color:#3068a7; color:white;}
+
+#table th {text-align:center;}

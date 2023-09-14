@@ -1,0 +1,230 @@
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/jsp/common/include.jsp"%>
+<c:set var="user_id" value="${sessionScope.SaveSession.user_id}" />
+<c:set var="perm_lv" value="${sessionScope.SaveSession.perm_lv}" />
+
+<div class="container">
+    <h1>게시판</h1>
+    <%-- 준비중 
+    <div class=''>
+        <div class="bg-white mb-2 row">
+	        <div class="form-group col-lg-3">
+	            <label for="searchTitle">제목</label>
+	            <input type="text" id="searchTitle" class="form-control" name="searchTitle" placeholder="제목" />
+	        </div>
+	        <div class="form-group col-lg-3">
+	            <label for="searchWriter">작성자</label>
+	            <input type="text" id="searchWriter" class="form-control" name="searchWriter" placeholder="작성자" />
+	        </div>
+	        <div class="d-md-flex justify-content-md-end">
+                <button type="button" id="searchBtn" class="btn btn-outline-primary" >조회</button>
+            </div>
+        </div>
+    </div>
+    --%>
+    <table id="boardTable" class="table table-striped table-dark">
+        <thead>
+            <tr class="text-center">
+                <c:if test="${perm_lv eq 'ADMIN'}">
+                    <th scope="col" style="width:5%"><input type='checkbox' id="all_chk" /></th>
+                </c:if>
+                <th scope="col" style="width:10%">순번</th>
+                <th scope="col" style="width:20%">작성자</th>
+                <th scope="col" style="width:45%">제목</th>
+                <th scope="col" style="width:10%">작성일</th>
+                <th scope="col" style="width:10%">조회수</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+        <span id="loginLog" class="font-red form-control-user"></span>
+    </div>
+    <div class="d-md-flex justify-content-md-end">
+        <button type="button" id="regBoardBtn" onclick="location.href='/jeon/board/regBoardPage.dcp'" class="btn btn-outline-primary" style="float: right;">작성</button>
+        <c:if test="${perm_lv eq 'ADMIN'}">
+            <button type="button" id="delBoardBtn" class="btn btn-outline-danger" style="float: right;">삭제</button>
+        </c:if>
+    </div>
+    
+    <div id="divPaging"></div>
+</div>
+
+
+<script type="text/javascript">
+var g_current_page = '<c:out value="${current_page}" />';
+var g_list_count   = '<c:out value="${list_count}" />';
+
+    $(document).ready(function() {
+        getBoardList(g_current_page);
+        $('#all_chk').prop("checked", false);
+        
+        <%-- 준비중 
+        $("#searchBtn").on('click', function(){
+        	getBoardList(g_current_page);
+        });
+        --%>
+        
+        <%-- 리스트 삭제 (관리자) --%>
+        $("#delBoardBtn").on('click', function(){
+            var chk_confirm = confirm("정말 삭제하실겁니까?");
+            if(chk_confirm){
+                delBoardList();
+            }
+        });
+        
+        <%-- 전체 체크박스 --%>
+        $("#all_chk").on('click', function(){
+            all_chk_evt();
+        });
+        
+        <%-- 리스트 체크박스가 상태가 변경될때마다 --%>
+        $(document).on('click', '.chk_box_board', function(){
+        	var all_len = $('input[name="board_idx"]').length
+            var chk_len = $('input[name="board_idx"]:checked').length
+            
+            if(all_len == chk_len){
+                $('#all_chk').prop("checked", true);
+            } else {
+                $('#all_chk').prop("checked", false);
+            }
+        });
+
+    });
+    
+   <%--
+     * @functionName  : getBoardList
+     * @description   : 게시물 리스트 호출
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.27  전형상    최초 생성
+     *
+     * @ param  current_page  현재 페이지
+    --%>
+    function getBoardList(current_page){
+        current_page     = typeof(current_page) === 'undefined' ? g_current_page : current_page;
+        var method       = "POST"
+        var url          = "/jeon/board/getBoardList.do";
+        <%-- 준비중
+        var searchTitle  = $('#searchTitle').val();
+        var searchWriter = $('#searchWriter').val();
+        --%>
+        
+        $.ajax({
+               url : url
+            , type : method
+            , data : {
+                  current_page : current_page
+                , list_count   : g_list_count
+                // , searchTitle  : searchTitle
+                // , searchWriter : searchWriter
+            }
+            , success : function(data){
+                var text = "";
+                var idx  = 1;
+                var date;
+                $.each(data[0], function (key, v) {
+                    date = str_to_yyyymmdd(v.create_dt, "-");
+                    
+                    text += "<tr class='text-center'>";
+                    text += "<input type='hidden' value='"+ v.board_idx    +"' />"; 
+                    text += "<input type='hidden' value='"+ v.board_wrt_id +"' />";
+                    if("${perm_lv}" == 'ADMIN'){
+                        text += "<td><input type='checkbox' class='chk_box_board' name='board_idx' value='"+ v.board_idx +"' /></td>";
+                    }
+                    text += "<td>" + idx            + "</td>"; 
+                    text += "<td>" + v.board_wrt_nm + "</td>"; 
+                    text += "<td onclick='detailBoard("+ v.board_idx +","+ current_page +")' style='cursor: pointer;'>" + v.board_title + "</td>";
+                    text += "<td>" + date           + "</td>"; 
+                    text += "<td>" + v.board_count  + "</td>"; 
+                    text += "</tr>"; 
+                    idx++
+                });
+                
+                getPageNavi("divPaging", "getBoardList", data[1]);
+                
+                $("#boardTable > tbody").html(text);
+                $('#all_chk').prop("checked", false);
+            }
+            , error : function(data, status){
+                conosole.log(data);
+            }
+        });
+    }
+    
+    <%--
+     * @functionName  : detailBoard
+     * @description   : 상세보기 페이지 이동
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.27  전형상    최초 생성
+    --%>
+    var detailBoard = function(board_idx, page) {
+        window.location.href='/jeon/board/boardDetailPage.dcp?board_idx='+board_idx+'&current_page='+page;
+    }
+    
+    <%--
+     * @functionName  : delBoardList
+     * @description   : 게시물 삭제 (관리자)
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.06.10  전형상    최초 생성
+    --%>
+    function delBoardList(current_page){
+        current_page = typeof(current_page) === 'undefined' ? g_current_page : current_page;
+        $('#loginLog').empty();
+        var board_idx_list = [];
+        var method    = "POST";
+        var url       = "/jeon/board/delBoardList.do";
+        var chk_list  = $('input[name="board_idx"]:checked');
+        if(chk_list.length > 0 ){
+            for(var i = 0; i < chk_list.length; i++){
+                board_idx_list.push(parseInt(chk_list.eq(i).val()));
+            }
+            
+            $.ajax({
+                  type : method
+                , url : url
+                , data : { "board_idx_list" : board_idx_list }
+                , dataType: 'json'
+                , traditional: true
+                , success : function(data){
+                    if ("Success"== data.errMsg ) {
+                        alert( data.queryCnt + "건이 삭제되었습니다.");
+                        getBoardList(1);
+                    }else{
+                        $("#loginLog").html(data.errMsg);
+                    }
+                }
+                , error : function(data, status){
+                    alert(status + " >> " + data.status);
+                }
+            });
+        } else {
+            $('#loginLog').html('삭제할 리스트를 선택해주세요.');
+        }
+    }
+    
+    
+    <%--
+     * @functionName  : all_chk_evt
+     * @description   : 전체 쳋크박스 이벤트
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.06.11  전형상    최초 생성
+     *
+     * @ para  
+    --%>
+    function all_chk_evt(){
+        var all_chk_yn = $('#all_chk').is(":checked");
+        if(all_chk_yn){
+            $('input[name="board_idx"]').prop("checked", true);
+        } else {
+            $('input[name="board_idx"]').prop("checked", false);
+        }
+    }
+</script>

@@ -1,0 +1,285 @@
+package onboarding.jeon.board;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import onboarding.jeon.common.CommonUtil;
+import onboarding.jeon.page.PageVo;
+import onboarding.jeon.session.SessionVo;
+
+@Service
+public class BoardSvc {
+    // 로거
+    static final Log logger = LogFactory.getLog(BoardSvc.class);
+	
+	@Autowired
+	private BoardMapper boardMapper;
+	
+	@Resource(name="commonUtil")
+    private CommonUtil commonUtil;
+	
+	private static final String savePageUrl  = "pageUrl";
+    private static final String saveErrMsg   = "errMsg";
+    private static final String saveErr      = "err";
+    private static final String saveQueryCnt = "queryCnt";
+    
+    /**
+     * @methodName  : getBoardList
+     * @description : 게시판 리스트 가져오기
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.17  전형상    최초 생성
+     *
+     * @param  PageVo
+     * @return List
+     * @throws Exception
+	*/
+	public List<BoardVo> getBoardList(PageVo vo) throws Exception {
+	    List<BoardVo> returnVo = boardMapper.getBoardList(vo);
+	    return returnVo;  
+	}
+	
+	/**
+	 * @methodName  : getBoardTotalList
+	 * @description : 게시판 리스트 총 개수 가져오기
+	 * @Modification
+	 * @ 수정일      수정자    수정내용
+	 * @ ----------  -------   --------
+	 * @ 2023.05.17  전형상    최초 생성
+	 *
+	 * @param  BoardVo
+	 * @return int
+	 * @throws Exception
+	 */
+	public int getBoardTotalList(BoardVo vo) throws Exception {
+	    return (int) boardMapper.getBoardTotalList(vo);
+	}
+	
+	/**
+	 * @methodName  : regBoard
+	 * @description : 게시판 저장
+	 * @Modification
+	 * @ 수정일      수정자    수정내용
+	 * @ ----------  -------   --------
+	 * @ 2023.05.16  전형상    최초 생성
+	 *
+	 * @param  BoardVo
+	 * @return Map
+	 * @throws Exception
+	 */
+	public Map<String, Object> regBoard(BoardVo vo) throws Exception {
+	    Map<String, Object> returnMap = new HashMap<String, Object>();
+	    String errMsg  = "";
+	    String pageUrl = "";
+	    try {
+	        
+            if(!(commonUtil.chkStrNull(vo.getBoard_content()))){
+                vo.setBoard_content(commonUtil.removeXSS(vo.getBoard_content()));
+            }
+            if(!(commonUtil.chkStrNull(vo.getBoard_title()))){
+                vo.setBoard_title(commonUtil.removeXSS(vo.getBoard_title()));
+            }
+            
+	        int insertBoard = boardMapper.regBoard(vo);
+	        
+	        if(insertBoard < 1) {
+	            errMsg = "정상적으로 저장되지 않았습니다.";
+	        } else {
+	            errMsg  = "Success";
+	            pageUrl = "/jeon/board/boardPage.dcp";
+	        }
+	        
+	        returnMap.put(saveErrMsg  , errMsg);
+	        returnMap.put(savePageUrl , pageUrl);
+	    }
+	    catch (Exception e){
+	        errMsg = "예상치 못한 문제가 발생했습니다.";
+	        logger.error(e);
+	        returnMap.put(saveErr    , e);
+	        returnMap.put(saveErrMsg , errMsg);
+	    }
+	    	    
+	    return returnMap;  
+	}
+	
+    /**
+     * @methodName  : getBoardList
+     * @description : 게시판 리스트 가져오기
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.17  전형상    최초 생성
+     * @ 2023.05.28  전형상    조회수 증가 및 리스트 호출
+     *
+     * @param  BoardVo
+     * @return List
+     * @throws Exception
+    */
+    public List<BoardVo> getBoardDetailList(BoardVo vo) throws Exception {
+        List<BoardVo> returnVo = null;
+        if(vo.getBoard_idx() == 0) {
+            System.out.println("세부 IDX 미탑재");
+        } else {
+            
+            // 게시물 조회수 증가
+            int cnt_plus = boardMapper.updBoardListCnt(vo);
+            
+            if(cnt_plus > 0) {
+                // List<BoardVo> returnVo = boardMapper.getBoardDetailList(vo);
+                returnVo = boardMapper.getBoardDetailList(vo);
+            }
+        }
+        
+        return returnVo;  
+    }
+    
+    /**
+     * @methodName  : updBoard
+     * @description : 게시판 수정
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.31  전형상    최초 생성
+     *
+     * @param  BoardVo
+     * @return Map
+     * @throws Exception
+    */
+    public Map<String, Object> updBoard(HttpServletRequest req,BoardVo vo) throws Exception {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String errMsg  = "";
+        String pageUrl = "";
+        try {
+            HttpSession session = req.getSession(); 
+            SessionVo sessVo = (SessionVo) session.getAttribute("SaveSession");
+            if(commonUtil.chkStrNull(sessVo.getUser_id()) || commonUtil.chkStrNull(sessVo.getPerm_cd())) {
+                errMsg = "세션에 저장된 값이 없습니다.";
+            } else {
+                vo.setBoard_upd_id(sessVo.getUser_id());
+                vo.setBoard_upd_nm(sessVo.getUser_nm());
+                
+                if(!(commonUtil.chkStrNull(vo.getBoard_content()))){
+                    vo.setBoard_content(commonUtil.removeXSS(vo.getBoard_content()));
+                }
+                if(!(commonUtil.chkStrNull(vo.getBoard_title()))){
+                    vo.setBoard_title(commonUtil.removeXSS(vo.getBoard_title()));
+                }
+                
+                int insertBoard = boardMapper.updBoard(vo);
+                if(insertBoard < 1) {
+                    errMsg = "정상적으로 수장되지 않았습니다.";
+                } else {
+                    errMsg  = "Success";
+                    pageUrl = "/jeon/board/boardPage.dcp";
+                }
+            }
+            
+            returnMap.put(saveErrMsg  , errMsg);
+            returnMap.put(savePageUrl , pageUrl);
+        }
+        catch (Exception e){
+            errMsg = "게시판 수정중 예상치 못한 문제가 발생했습니다.";
+            logger.error(e);
+            returnMap.put(saveErr    , e);
+            returnMap.put(saveErrMsg , errMsg);
+        }
+                
+        return returnMap;  
+    }
+    
+    /**
+     * @methodName  : delBoardList
+     * @description : 게시판 삭제 (관리자 권한)
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.06.10  전형상    최초 생성
+     *
+     * @param  BoardVo
+     * @return Map
+     * @throws Exception
+    */
+    @Transactional(rollbackOn = {Exception.class})
+    public Map<String, Object> delBoardList(BoardVo vo) throws Exception {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String errMsg  = "";
+        try {
+            int list_size = vo.getBoard_idx_list().length;
+            int queryCnt  = 0;
+            
+            if(list_size > 0) {
+                for(int i = 0; i < list_size; i++) {
+                    queryCnt += boardMapper.delBoard(vo.getBoard_idx_list()[i]);
+                }
+                if(queryCnt > 0) {
+                    errMsg = "Success";
+                }
+            } else {
+                errMsg = "선택된 박스의 idx 값 파라미터가 없습니다.";
+            }
+            
+            returnMap.put(saveErrMsg   , errMsg);
+            returnMap.put(saveQueryCnt , queryCnt);
+        }
+        catch (Exception e){
+            errMsg = "예상치 못한 문제가 발생했습니다.";
+            logger.error(e);
+            returnMap.put(saveErr    , e);
+            returnMap.put(saveErrMsg , errMsg);
+        }
+                
+        return returnMap;  
+    }
+    
+    /**
+     * @methodName  : delBoard
+     * @description : 게시판 삭제
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.06.11  전형상    최초 생성
+     *
+     * @param  BoardVo
+     * @return Map
+     * @throws Exception
+    */
+    @Transactional(rollbackOn = {Exception.class})
+    public Map<String, Object> delBoard(BoardVo vo) throws Exception {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String errMsg  = "";
+        try {
+            if(vo.getBoard_idx() != 0){
+                int queryCnt = boardMapper.delBoard(vo.getBoard_idx());
+                if(queryCnt > 0) {
+                    errMsg = "Success";
+                } else {
+                    errMsg = "쿼리실행 도중 누수 발생";
+                }
+            } else {
+                errMsg = "지금 페이지의 인덱스를 검출해내지 못했습니다.";
+            }
+            
+            returnMap.put(saveErrMsg   , errMsg);
+        }
+        catch (Exception e){
+            errMsg = "예상치 못한 문제가 발생했습니다.";
+            logger.error(e);
+            returnMap.put(saveErr    , e);
+            returnMap.put(saveErrMsg , errMsg);
+        }
+        
+        return returnMap;  
+    }
+}

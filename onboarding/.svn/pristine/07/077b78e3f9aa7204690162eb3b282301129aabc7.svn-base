@@ -1,0 +1,142 @@
+package onboarding.jeon.login;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import onboarding.jeon.common.CommonUtil;
+import onboarding.jeon.session.SessionVo;
+import onboarding.jeon.user.UserVo;
+
+@Service
+public class LoginSvc {
+    // 로거
+    static final Log logger = LogFactory.getLog(LoginSvc.class);
+    
+    @Autowired
+    private LoginMapper loginMapper;
+    
+    @Resource(name="commonUtil")
+    private CommonUtil commonUtil;
+    
+    private static final String saveSession = "SaveSession";
+    private static final String savePageUrl = "pageUrl";
+    private static final String saveErrMsg  = "errMsg";
+    
+    /**
+     * @methodName  : login
+     * @description : 로그인 요청
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초 생성
+     * @ 2023.05.25  전형상    세션VO 생성 및 로직 수정
+     *
+     * @param request
+     * @param session
+     * @return
+     * @throws Exception
+    */
+    public Map<String, Object> login(HttpSession session, LoginVo vo) throws Exception {
+        
+        String pageUrl   = "/jeon/login/loginPage.dcp";
+        String errMsg    = "";        
+        SessionVo sessVo = new SessionVo();
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        
+        LoginVo resultVo = loginMapper.login(vo);
+
+        if(resultVo != null) {
+            if(!(commonUtil.chkStrNull(resultVo.getUser_id())) && !(commonUtil.chkStrNull(resultVo.getUser_nm()))) {
+                if(commonUtil.chkStrNull(resultVo.getPerm_cd()) ) {
+                    errMsg  = "권한이 없습니다. 관리자에게 문의하세요";
+                } else if(commonUtil.chkStrNull(resultVo.getGrp_cd())) {
+                    errMsg  = "그룹은 필수";
+                } else {
+                    // 마지막 로그인 일시 변경
+                    int updateLastLogin = loginMapper.updateLastLoginDT(vo);
+                    if(updateLastLogin > 0) {
+                        pageUrl = "/jeon/main/dashboard.dcp";
+                        errMsg  = "Success";
+                        
+                        // loginVo copy To SessionVo
+                        BeanUtils.copyProperties(resultVo, sessVo);
+                        session.setAttribute(saveSession , sessVo);
+                    }else {
+                        errMsg  = "마지막 로그인일자 수정중 에러 발생";
+                    }
+                }
+            }
+        } else {
+            // Failed dt update + cnt
+            // loginMapper.updateLastFailedLoginDT(vo);
+            errMsg  = "아이디와 비밀번호가 일치하지 않습니다.";
+        }
+        
+        returnMap.put(savePageUrl  , pageUrl);
+        returnMap.put(saveErrMsg   , errMsg);
+        
+        return returnMap;
+    }
+    
+    
+    /**
+     * @methodName  : joinUser
+     * @description : 회원가입 요청
+     * @Modification
+     * @ 수정일      수정자    수정내용
+     * @ ----------  -------   --------
+     * @ 2023.05.16  전형상    최초 생성
+     *
+     * @param request
+     * @param session
+     * @return
+     * @throws Exception
+    */
+    public Map<String, Object> joinUser(UserVo vo) throws Exception {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String errMsg  = "";
+        String pageUrl = "";
+        if(
+               (commonUtil.chkStrNull(vo.getUser_id())) ||
+               (commonUtil.chkStrNull(vo.getUser_pw())) ||
+               (commonUtil.chkStrNull(vo.getUser_nm()))
+        ){
+            errMsg = "필수 요소들이 빠졌습니다.";
+            pageUrl = "/jeon/login/joinPage.dcp";
+        } else {
+            String idChk = (String) vo.getUser_id();
+            
+            // 아이디 중복체크
+            int idChkresult = loginMapper.chkJoinUser(idChk);
+            
+            if(idChkresult != 0) {
+                errMsg = "중복된 아이디가 있습니다.";
+            } else {
+                
+                // 회원 가입
+                int sucess = loginMapper.joinUser(vo);
+                
+                if(sucess != 0) {
+                    errMsg  = "Success";
+                    pageUrl = "/jeon/login/loginPage.dcp";
+                } else {
+                    errMsg  = "Not Insert into query";
+                    pageUrl = "/jeon/login/joinPage.dcp";
+                }
+            }
+        }
+        
+        returnMap.put(saveErrMsg  , errMsg);
+        returnMap.put(savePageUrl , pageUrl);
+        return returnMap;  
+    }
+}

@@ -1,0 +1,111 @@
+package onboarding.jeon.board;
+
+public class BoardVo {
+    
+    private int board_idx;
+    private String board_wrt_id;
+    private String board_wrt_nm;
+    private String board_upd_id;
+    private String board_upd_nm;
+    private String board_title;
+    private String board_content;
+    private String board_count;
+    private String create_dt;
+    private String update_dt;
+    private int[] board_idx_list;
+    private String searchTitle;
+    private String searchWriter;
+    private int start_num;
+    private int line_page;
+    
+    public int getBoard_idx() {
+        return board_idx;
+    }
+    public void setBoard_idx(int board_idx) {
+        this.board_idx = board_idx;
+    }
+    public String getBoard_wrt_id() {
+        return board_wrt_id;
+    }
+    public void setBoard_wrt_id(String board_wrt_id) {
+        this.board_wrt_id = board_wrt_id;
+    }
+    public String getBoard_wrt_nm() {
+        return board_wrt_nm;
+    }
+    public void setBoard_wrt_nm(String board_wrt_nm) {
+        this.board_wrt_nm = board_wrt_nm;
+    }
+    public String getBoard_upd_id() {
+        return board_upd_id;
+    }
+    public void setBoard_upd_id(String board_upd_id) {
+        this.board_upd_id = board_upd_id;
+    }
+    public String getBoard_upd_nm() {
+        return board_upd_nm;
+    }
+    public void setBoard_upd_nm(String board_upd_nm) {
+        this.board_upd_nm = board_upd_nm;
+    }
+    public String getBoard_title() {
+        return board_title;
+    }
+    public void setBoard_title(String board_title) {
+        this.board_title = board_title;
+    }
+    public String getBoard_content() {
+        return board_content;
+    }
+    public void setBoard_content(String board_content) {
+        this.board_content = board_content;
+    }
+    public String getBoard_count() {
+        return board_count;
+    }
+    public void setBoard_count(String board_count) {
+        this.board_count = board_count;
+    }
+    public String getCreate_dt() {
+        return create_dt;
+    }
+    public void setCreate_dt(String create_dt) {
+        this.create_dt = create_dt;
+    }
+    public String getUpdate_dt() {
+        return update_dt;
+    }
+    public void setUpdate_dt(String update_dt) {
+        this.update_dt = update_dt;
+    }
+    public int[] getBoard_idx_list() {
+        return board_idx_list;
+    }
+    public void setBoard_idx_list(int[] board_idx_list) {
+        this.board_idx_list = board_idx_list;
+    }
+    public String getSearchTitle() {
+        return searchTitle;
+    }
+    public void setSearchTitle(String searchTitle) {
+        this.searchTitle = searchTitle;
+    }
+    public String getSearchWriter() {
+        return searchWriter;
+    }
+    public void setSearchWriter(String searchWriter) {
+        this.searchWriter = searchWriter;
+    }    
+    public int getStart_num() {
+        return start_num;
+    }
+    public void setStart_num(int start_num) {
+        this.start_num = start_num;
+    }
+    public int getLine_page() {
+        return line_page;
+    }
+    public void setLine_page(int line_page) {
+        this.line_page = line_page;
+    }
+}

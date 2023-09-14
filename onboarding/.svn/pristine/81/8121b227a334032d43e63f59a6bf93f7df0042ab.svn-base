@@ -1,0 +1,165 @@
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/jsp/common/include.jsp"%>
+<c:set var="user_id" value="${sessionScope.SaveSession.user_id}" />
+<c:set var="perm_lv" value="${sessionScope.SaveSession.perm_lv}" />
+
+<div class="container">
+    <%-- <h1>게시판 상세페이지 <c:out value="${boardList.BOARD_TITLE}"></c:out></h1> --%>
+    <h1>게시판 상세페이지</h1>
+    <form id="boardUpdForm" class="board">
+        <input type="hidden" id="board_idx" name="board_idx" value='<c:out value="${boardList[0].board_idx}"/>' >
+        <div class="row mb-2">
+            <label for="board_title" class="col-sm-3 col-form-label"><em class="font-red">*</em> 제목</label>
+            <div class="col-sm-9">
+                <input type="text" id="board_title" name="board_title" class="form-control"  />
+            </div>
+        </div>
+        <!-- 
+        <div class="row mb-2">
+            <label for="board_file_nm" class="col-sm-3 col-form-label"><em class="font-red">*</em> 파일 첨부</label>
+            <div class="col-sm-9">
+                <input type="file" id="board_file_nm" name="board_file_nm" class="form-control" multiple="multiple">
+                <div id="testDiv"></div>
+            </div>
+        </div>
+        -->
+        <div class="row mb-2">
+            <label for="board_content" class="col-sm-3 col-form-label"><em class="font-red">*</em> 내용</label>
+            <div class="col-sm-9">
+                <textarea id="board_content" name="board_content" class="form-control" cols="100" rows="10"></textarea>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="board_wrt_nm" class="col-sm-3 col-form-label"><em class="font-red">*</em> 작성자</label>
+            <div class="col-sm-9">
+                <input type="hidden" id="board_wrt_id" name="board_wrt_id" class="form-control" value='<c:out value="${boardList[0].board_wrt_id}"/>'/>
+                <input type="text"   id="board_wrt_nm" name="board_wrt_nm" class="form-control" value='<c:out value="${boardList[0].board_wrt_nm}"/>' readonly/>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="create_dt" class="col-sm-3 col-form-label"><em class="font-red">*</em> 최초 작성일</label>
+            <div class="col-sm-9">
+                <input type="text" id="create_dt" name="create_dt" class="form-control" value='<c:out value="${boardList[0].create_dt}"/>' readonly/>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="board_upd_nm" class="col-sm-3 col-form-label"><em class="font-red">*</em> 마지막 수정자</label>
+            <div class="col-sm-9">
+                <input type="hidden" id="board_upd_id" name="board_upd_id" class="form-control" value='<c:out value="${sessionScope.SaveSession.user_id}"/>'>
+                <input type="text"   id="board_upd_nm" name="board_upd_nm" class="form-control" value='<c:out value="${boardList[0].board_upd_nm}"/>' readonly />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="update_dt" class="col-sm-3 col-form-label"><em class="font-red">*</em> 마지막 수정일</label>
+            <div class="col-sm-9">
+                <input type="text"   id="update_dt" name="update_dt" class="form-control" value='<c:out value="${boardList[0].update_dt}"/>' readonly />
+            </div>
+        </div>
+    </form>
+    <div class="d-flex justify-content-center">
+        <span id="loginLog" class="font-red form-control-user"></span>
+    </div>
+    <div class="d-md-flex justify-content-md-end">
+        <c:if test="${perm_lv eq 'ADMIN' || user_id eq boardList[0].board_wrt_id}">
+            <button type="button" id="upd_board_btn" class="btn btn-outline-primary" style="float: right;">수정</button>
+            <button type="button" id="del_board_btn" class="btn btn-outline-danger"  style="float: right;">삭제</button>
+        </c:if>
+        <button type="button" id="rec_main_btn"  class="btn btn-outline-secondary" style="float: right;">뒤로가기</button>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+var current_page = <c:out value='${current_page}'/>
+    $(document).ready(function() {
+        var board_conent = textXSS("<c:out escapeXml='false' value='${boardList[0].board_content}'/>");
+        var board_title  = textXSS("<c:out escapeXml='false' value='${boardList[0].board_title}'/>");
+        $('#board_content').html(board_conent);
+        $('#board_title').val(board_title);
+        
+        <%-- 수정 버튼 --%>
+        $("#upd_board_btn").on('click', function(){
+            $("#loginLog").empty();
+            board_title   = $("#board_title").val().trim();
+            board_content = $("#board_content").val().trim();
+            
+            if(isEmpty(board_title)){
+                $("#board_title").focus();
+                $("#loginLog").html("제목을 입력해주세요");
+                return;
+            }
+            
+            if(isEmpty(board_content)){
+                $("#board_content").focus();
+                $("#loginLog").html("내용을 입력해주세요");
+                return;
+            }
+            
+            $.ajax({ 
+                type    : "POST"
+              , url     : "/jeon/board/updBoard.do"
+              , data    : $("#boardUpdForm").serialize()
+              , success : function (data) {
+                    if ("Success"== data.errMsg ) {
+                        alert("수정이 완료되었습니다.");
+                        location.href = data.pageUrl;
+                    }else{
+                        $("#loginLog").html(data.errMsg);
+                    }
+                }
+                , error : function (data, status) {
+                    alert(status + " >> " + data.status);
+                }
+            });
+        });
+        
+        <%-- 목록으로 돌아가기 --%>
+        $('#rec_main_btn').on('click', function(){
+            // location.href = "/jeon/board/boardPage.dcp?current_page=" + current_page;
+            window.history.back();
+        });
+        
+        <%-- 삭제 버튼 --%>
+        $("#del_board_btn").on('click', function(){
+            var chk_confirm = confirm("정말 삭제하실겁니까?");
+            if(chk_confirm){
+                delBoard();
+            }
+        });
+    });
+    
+    
+   <%--
+    * @functionName  : delBoard
+    * @description   : 게시물 삭제
+    * @Modification
+    * @ 수정일      수정자    수정내용
+    * @ ----------  -------   --------
+    * @ 2023.06.11  전형상    최초 생성
+   --%>
+   function delBoard(){
+       $('#loginLog').empty();
+       var method = "POST";
+       var url    = "/jeon/board/delBoard.do";
+       var board_idx = $('#board_idx').val();
+       
+       $.ajax({
+             type : method
+           , url : url
+           , data : { "board_idx" : board_idx }
+           , dataType: 'json'
+           , success : function(data){
+               if ("Success"== data.errMsg ) {
+                   alert("삭제되었습니다.");
+                   location.href = "/jeon/board/boardPage.dcp?current_page=" + current_page;
+               }else{
+                   $("#loginLog").html(data.errMsg);
+               }
+           }
+           , error : function(data, status){
+               alert(status + " >> " + data.status);
+           }
+       });
+
+   }
+</script>

@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Nanum Barunpen';
+  font-weight: 400;
+  src: url(NanumBarunpen/NanumBarunpen.eot);
+  src: url(NanumBarunpen/NanumBarunpen.woff) format('woff'),
+       url(NanumBarunpen/NanumBarunpen.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Barunpen';
+  font-weight: bold;
+  src: url(NanumBarunpen/NanumBarunpenBold.eot);
+  src: url(NanumBarunpen/NanumBarunpenBold.woff) format('woff'),
+       url(NanumBarunpen/NanumBarunpenBold.ttf) format('truetype');
+}
+
+

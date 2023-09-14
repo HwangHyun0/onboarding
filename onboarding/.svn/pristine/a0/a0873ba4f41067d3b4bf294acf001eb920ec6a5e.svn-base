@@ -1,0 +1,105 @@
+package onboarding.jeon.page;
+
+public class PageVo {
+    // 게시글 총 갯수
+    private int list_total_count;
+    
+    // 현재페이지
+    private int current_page;
+    
+    // 시작페이지 
+    private int start_page;
+    
+    // 끝페이지
+    private int end_page;
+    
+    // 페이지당 글 갯수
+    private int list_count;
+    
+    // 마지막 페이지
+    private int last_page;
+    
+    // SQL쿼리에 쓸 시작번호
+    private int start_num;
+    
+    // 한 라인당 페이징 갯수
+    private int line_page = 5;
+    
+    public PageVo() {}
+    public PageVo(int list_total_count, int current_page, int list_count) {
+        setCurrent_page(current_page);
+        setList_count(list_count);
+        setList_total_count(list_total_count);
+        calcLastPage(getList_total_count(), getList_count());
+        calcStartEndPage(getCurrent_page(), line_page);
+        calcStartEnd(getCurrent_page(), getList_count());
+    }
+    // 제일 마지막 페이지 계산
+    public void calcLastPage(int list_total_count, int list_count) {
+        setLast_page((int) Math.ceil((double)list_total_count / (double)list_count));
+    }
+    // 시작, 끝 페이지 계산
+    public void calcStartEndPage(int current_page, int line_page) {
+        setEnd_page(((int)Math.ceil((double)current_page / (double)line_page)) * line_page);
+        if (getLast_page() < getEnd_page()) {
+            setEnd_page(getLast_page());
+        }
+        setStart_page(getEnd_page() - line_page + 1);
+        if (getStart_page() < 1) {
+            setStart_page(1);
+        }
+    }
+    // DB 쿼리에서 사용할 start, end값 계산
+    public void calcStartEnd(int current_page, int list_count) {
+        setStart_num((current_page * list_count) - list_count);
+    }
+    
+    public int getCurrent_page() {
+        return current_page;
+    }
+    public void setCurrent_page(int current_page) {
+        this.current_page = current_page;
+    }
+    public int getStart_page() {
+        return start_page;
+    }
+    public void setStart_page(int start_page) {
+        this.start_page = start_page;
+    }
+    public int getEnd_page() {
+        return end_page;
+    }
+    public void setEnd_page(int end_page) {
+        this.end_page = end_page;
+    }
+    public int getList_total_count() {
+        return list_total_count;
+    }
+    public void setList_total_count(int list_total_count) {
+        this.list_total_count = list_total_count;
+    }
+    public int getList_count() {
+        return list_count;
+    }
+    public void setList_count(int list_count) {
+        this.list_count = list_count;
+    }
+    public int getLast_page() {
+        return last_page;
+    }
+    public void setLast_page(int last_page) {
+        this.last_page = last_page;
+    }
+    public int getStart_num() {
+        return start_num;
+    }
+    public void setStart_num(int start_num) {
+        this.start_num = start_num;
+    }
+    public int getLine_page() {
+        return line_page;
+    }
+    public void setLine_page(int line_page) {
+        this.line_page = line_page;
+    }
+}
